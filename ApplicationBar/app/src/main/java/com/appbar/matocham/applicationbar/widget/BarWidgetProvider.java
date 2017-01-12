@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.widget.RemoteViews;
 
 import com.appbar.matocham.applicationbar.R;
+import com.appbar.matocham.applicationbar.Utils;
+import com.appbar.matocham.applicationbar.applicationManager.WidgetAppsManager;
 
 /**
  * Created by Mateusz on 10.01.2017.
@@ -24,7 +26,12 @@ public class BarWidgetProvider extends AppWidgetProvider {
         if (intent.getAction().equals(LAUNCH_APP_ACTION)) {
             String packageName = intent.getStringExtra(APP_ID);
             Intent starAppIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
-            context.startActivity(starAppIntent);
+            if(starAppIntent!=null){
+                context.startActivity(starAppIntent);
+            } else {
+                WidgetAppsManager.removeAppFromWidget(packageName,context);
+                AppBarWidgetService.updateAdapter(context);
+            }
         }
         super.onReceive(context, intent);
     }

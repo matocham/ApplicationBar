@@ -13,7 +13,10 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by Mateusz on 10.01.2017.
+ * Created by Mateusz on 10.01.2017
+ *
+ * Class to manage adding and deleting apps from widget. Most methods are static and require context in parameters
+ * , only one listen to switch changes in list
  */
 
 public class WidgetAppsManager implements OnSwitchStateChangedListener {
@@ -25,6 +28,11 @@ public class WidgetAppsManager implements OnSwitchStateChangedListener {
         this.context = context;
     }
 
+    /**
+     * get apps added to display in widget
+     * @param context
+     * @return
+     */
     public static List<AppInfo> getMarkedApps(Context context) {
         String[] apps = getWigetAppsTable(context);
         PackageManager packageManager = context.getPackageManager();

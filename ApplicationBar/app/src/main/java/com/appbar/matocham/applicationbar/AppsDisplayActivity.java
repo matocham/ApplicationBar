@@ -1,7 +1,5 @@
 package com.appbar.matocham.applicationbar;
 
-import android.appwidget.AppWidgetManager;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,14 +13,13 @@ import com.appbar.matocham.applicationbar.adapters.ApplicationListAdapter;
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
 import com.appbar.matocham.applicationbar.applicationManager.WidgetAppsManager;
 import com.appbar.matocham.applicationbar.asuncTasks.LoadAppsAsyncTask;
-import com.appbar.matocham.applicationbar.widget.BarWidgetProvider;
+import com.appbar.matocham.applicationbar.widget.AppBarWidgetService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AppsDisplayActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
     public static final int LOAD_FINISHED = 1;
-    boolean firstRun = true;
     ApplicationListAdapter adapter;
     ListView listView;
     List<AppInfo> apps;
@@ -34,10 +31,7 @@ public class AppsDisplayActivity extends AppCompatActivity implements AdapterVie
                 adapter.clear();
                 adapter.addAll((List<AppInfo>) msg.obj);
                 adapter.notifyDataSetChanged();
-                if (firstRun) {
-                    firstRun = false;
-                    updateWidget();
-                }
+                    AppBarWidgetService.updateWidget(AppsDisplayActivity.this);
             }
             super.handleMessage(msg);
         }
@@ -72,23 +66,10 @@ public class AppsDisplayActivity extends AppCompatActivity implements AdapterVie
         widgetAppManager.switchChanged(adapter.getItem(position), swx.isChecked());
     }
 
-    private void updateWidget() {
-        Intent intent = new Intent(this, BarWidgetProvider.class);
-        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        int ids[] = Utils.getAppWidgetIds(this);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-        sendBroadcast(intent);
-    }
-
     @Override
     protected void onPause() {
-        updateAdapter();
+        AppBarWidgetService.updateAdapter(this);
         super.onPause();
     }
 
-    private void updateAdapter() {
-        int ids[] = Utils.getAppWidgetIds(this);
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.listView2);
-    }
 }

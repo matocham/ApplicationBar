@@ -1,10 +1,12 @@
 package com.appbar.matocham.applicationbar;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -32,9 +34,19 @@ public class Utils {
         return msg;
     }
 
-    public static int[] getAppWidgetIds(Activity activity) {
-        int[] ids = AppWidgetManager.getInstance(activity.getApplication()).getAppWidgetIds(new ComponentName(activity.getApplication(), BarWidgetProvider.class));
-        Log.e("UTILS","Widget ids list: " + Arrays.toString(ids));
-        return ids;
+    public static void showInfoDialog(Context context, String title, String message) {
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(message);
+        alertDialog.setCancelable(false);
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
     }
+
 }

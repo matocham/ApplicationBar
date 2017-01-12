@@ -1,5 +1,6 @@
 package com.appbar.matocham.applicationbar.widget;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -7,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -22,11 +24,15 @@ import java.util.List;
  */
 
 public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+    public static final String TAG = "AppBarWidgetFactory";
     Context context;
     List<AppInfo> markedApps = new ArrayList<>();
+    int widgetId;
 
     public AppBarWidgetRemoteViewsFactory(Context context, Intent intent) {
         this.context = context;
+        this.widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,-1);
+        Log.e(TAG,"WidgetID= "+widgetId);
     }
 
     @Override
@@ -42,6 +48,7 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
     @Override
     public void onDestroy() {
         markedApps.clear();
+        Log.e(TAG,"Destroying widget with id "+widgetId);
     }
 
     @Override
