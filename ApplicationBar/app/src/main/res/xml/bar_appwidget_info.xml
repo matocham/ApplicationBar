@@ -3,8 +3,9 @@
     android:minWidth="40dp"
     android:minHeight="110dp"
     android:updatePeriodMillis="0"
-    android:previewImage="@drawable/preview"
     android:initialLayout="@layout/bar_widget_layout"
     android:resizeMode="vertical"
     android:widgetCategory="home_screen">
 </appwidget-provider>
+
+    <!--android:previewImage="@drawable/widget_prev"-->

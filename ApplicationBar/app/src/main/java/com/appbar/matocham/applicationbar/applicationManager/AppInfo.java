@@ -5,9 +5,8 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.util.Log;
-
-import com.appbar.matocham.applicationbar.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,13 +18,13 @@ import java.util.List;
 
 public class AppInfo implements  Comparable<AppInfo>{
 
-    private String appname;
-    private String pname;
+    private String appLabel;
+    private String packageName;
     private Drawable icon;
     private Intent launchIntent;
 
     private void prettyPrint() {
-        Log.d(AppInfo.class.getName(),appname + "\t" + pname);
+        Log.d(AppInfo.class.getSimpleName(), appLabel + "\t" + packageName);
     }
 
     public static ArrayList<AppInfo> getApplications(Context context, boolean getSysPackages) {
@@ -47,26 +46,37 @@ public class AppInfo implements  Comparable<AppInfo>{
             if ((!getSysPackages) && isSystemPackage(appI)) {
                 continue ;
             }
-            AppInfo newInfo = new AppInfo();
-            newInfo.appname = appI.loadLabel(packageManager).toString();
-            newInfo.pname = appI.packageName;
-            newInfo.icon = appI.loadIcon(packageManager);
-            newInfo.launchIntent = packageManager.getLaunchIntentForPackage(appI.packageName);
-            res.add(newInfo);
+            AppInfo newInfo = getAppInfo(packageManager, appI);
+            if(newInfo!=null){
+                res.add(newInfo);
+            }
         }
         return res;
+    }
+
+    public static AppInfo getAppInfo(PackageManager packageManager, ApplicationInfo appI) {
+        if(packageManager.getLaunchIntentForPackage(appI.packageName) == null){
+            return null;
+        }
+        AppInfo newInfo = new AppInfo();
+        newInfo.setAppLabel(appI.loadLabel(packageManager).toString());
+        newInfo.setPackageName(appI.packageName);
+        newInfo.setIcon(appI.loadIcon(packageManager));
+        newInfo.setLaunchIntent(packageManager.getLaunchIntentForPackage(appI.packageName));
+
+        return newInfo;
     }
 
     private static boolean isSystemPackage(ApplicationInfo appInfo) {
         return ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) ? true : false;
     }
 
-    public String getAppname() {
-        return appname;
+    public String getAppLabel() {
+        return appLabel;
     }
 
-    public String getPname() {
-        return pname;
+    public String getPackageName() {
+        return packageName;
     }
 
     public Drawable getIcon() {
@@ -77,19 +87,44 @@ public class AppInfo implements  Comparable<AppInfo>{
         return launchIntent;
     }
 
-    public static List<AppInfo> getMarkedApps(Context context) {
-        String[] apps = Utils.getWigetAppsTable(context);
-        PackageManager packageManager = context.getPackageManager();
-        return null;
+    public void setAppLabel(String appLabel) {
+        this.appLabel = appLabel;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
+    public void setIcon(Drawable icon) {
+        this.icon = icon;
+    }
+
+    public void setLaunchIntent(Intent launchIntent) {
+        this.launchIntent = launchIntent;
     }
 
     @Override
     public int compareTo(AppInfo another) {
-        return appname.compareTo(another.appname);
+        return appLabel.compareTo(another.appLabel);
     }
 
     @Override
     public String toString() {
-        return pname+"."+appname;
+        return packageName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(!(o instanceof AppInfo)){
+            return false;
+        }
+
+        AppInfo otherApp = (AppInfo) o;
+        return packageName.equals(otherApp.packageName);
+    }
+
+    @Override
+    public int hashCode() {
+        return packageName.hashCode();
     }
 }

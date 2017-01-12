@@ -1,20 +1,18 @@
 package com.appbar.matocham.applicationbar.widget;
 
-import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.appbar.matocham.applicationbar.R;
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
+import com.appbar.matocham.applicationbar.applicationManager.WidgetAppsManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +31,12 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
 
     @Override
     public void onCreate() {
-        markedApps = AppInfo.getMarkedApps(context);
+        markedApps = WidgetAppsManager.getMarkedApps(context);
     }
 
     @Override
     public void onDataSetChanged() {
-        markedApps = AppInfo.getMarkedApps(context);
+        markedApps = WidgetAppsManager.getMarkedApps(context);
     }
 
     @Override
@@ -58,7 +56,7 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
         item.setImageViewBitmap(R.id.app_icon_widget, drawableToBitmap(appInfo.getIcon()));
 
         Bundle extras = new Bundle();
-        extras.putString(BarWidgetProvider.APP_ID, appInfo.getPname());
+        extras.putString(BarWidgetProvider.APP_ID, appInfo.getPackageName());
         Intent fillInIntent = new Intent();
         fillInIntent.putExtras(extras);
 

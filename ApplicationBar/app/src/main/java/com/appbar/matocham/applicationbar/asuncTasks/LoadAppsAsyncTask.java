@@ -34,7 +34,7 @@ public class LoadAppsAsyncTask extends AsyncTask<Void, Void, List<AppInfo>> {
 
     @Override
     protected void onPreExecute() {
-        progress = Utils.showProgressDialog(context,"Ladowanie aplikacji", "Proszę czekać");
+        progress = Utils.showProgressDialog(context,"Ładowanie aplikacji", "Proszę czekać");
         super.onPreExecute();
     }
 
