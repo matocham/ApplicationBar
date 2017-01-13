@@ -55,8 +55,8 @@ public class AppsDisplayActivity extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        AppInfo info = adapter.getItem(position);
-        startActivity(info.getLaunchIntent());
+        /*AppInfo info = adapter.getItem(position);
+        startActivity(getPackageManager().getLaunchIntentForPackage(info.getPackageName()));*/
     }
 
     @Override

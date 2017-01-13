@@ -4,17 +4,17 @@
     android:id="@+id/activity_apps_display"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="0dp"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="0dp"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_bottom_margin"
+    android:paddingLeft="@dimen/activity_left_margin"
+    android:paddingRight="@dimen/activity_right_margin"
+    android:paddingTop="@dimen/activity_top_margin"
+    android:background="@color/windowBackground"
     tools:context="com.appbar.matocham.applicationbar.AppsDisplayActivity">
 
     <ListView
         android:id="@+id/listView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
         android:background="@android:color/transparent">
     </ListView>
 </FrameLayout>

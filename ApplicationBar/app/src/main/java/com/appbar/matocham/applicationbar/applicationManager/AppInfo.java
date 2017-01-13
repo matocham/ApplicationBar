@@ -2,10 +2,11 @@ package com.appbar.matocham.applicationbar.applicationManager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -21,15 +22,13 @@ public class AppInfo implements  Comparable<AppInfo>{
     private String appLabel;
     private String packageName;
     private Drawable icon;
-    private Intent launchIntent;
 
-    private void prettyPrint() {
-        Log.d(AppInfo.class.getSimpleName(), appLabel + "\t" + packageName);
+    private AppInfo(){ // private constructor to prevent creation without using factory methods
+
     }
 
     public static ArrayList<AppInfo> getApplications(Context context, boolean getSysPackages) {
-        ArrayList<AppInfo> apps = getInstalledApps(getSysPackages, context); /* false = no system packages */
-        Collections.sort(apps);
+        ArrayList<AppInfo> apps = getInstalledApps(context, getSysPackages); /* false = no system packages */
         final int max = apps.size();
         for (int i=0; i<max; i++) {
             apps.get(i).prettyPrint();
@@ -37,12 +36,12 @@ public class AppInfo implements  Comparable<AppInfo>{
         return apps;
     }
 
-    private static ArrayList<AppInfo> getInstalledApps(boolean getSysPackages, Context context) {
-        ArrayList<AppInfo> res = new ArrayList<AppInfo>();
+    private static ArrayList<AppInfo> getInstalledApps(Context context, boolean getSysPackages) {
+        ArrayList<AppInfo> res = new ArrayList<>();
         PackageManager packageManager = context.getPackageManager();
-        List<ApplicationInfo> appsInfo = packageManager.getInstalledApplications(0);
+        List<ActivityInfo> appsInfo = getInstalledApps(packageManager);
         for(int i=0;i<appsInfo.size();i++) {
-            ApplicationInfo appI = appsInfo.get(i);
+            ActivityInfo appI = appsInfo.get(i);
             if ((!getSysPackages) && isSystemPackage(appI)) {
                 continue ;
             }
@@ -51,23 +50,58 @@ public class AppInfo implements  Comparable<AppInfo>{
                 res.add(newInfo);
             }
         }
+        Collections.sort(res);
         return res;
     }
 
-    public static AppInfo getAppInfo(PackageManager packageManager, ApplicationInfo appI) {
-        if(packageManager.getLaunchIntentForPackage(appI.packageName) == null){
-            return null;
+    private static List<ActivityInfo> getInstalledApps(PackageManager packageManager){
+        List<ResolveInfo> foundEntries = queryForApps(packageManager, null);
+        if (foundEntries.isEmpty()) {
+            return new ArrayList<>();
         }
+        List<ActivityInfo> foundApps = new ArrayList<>();
+
+        for(ResolveInfo inf : foundEntries){
+            foundApps.add(inf.activityInfo);
+        }
+        return foundApps;
+    }
+
+    public static AppInfo getAppInfo(PackageManager packageManager, ActivityInfo appI) {
         AppInfo newInfo = new AppInfo();
         newInfo.setAppLabel(appI.loadLabel(packageManager).toString());
         newInfo.setPackageName(appI.packageName);
         newInfo.setIcon(appI.loadIcon(packageManager));
-        newInfo.setLaunchIntent(packageManager.getLaunchIntentForPackage(appI.packageName));
 
         return newInfo;
     }
 
-    private static boolean isSystemPackage(ApplicationInfo appInfo) {
+    public static AppInfo getAppInfo(PackageManager packageManager, String packageName) {
+        List<ResolveInfo> foundEntries = queryForApps(packageManager,packageName);
+        if (foundEntries.isEmpty()) {
+            return null;
+        }
+        return getAppInfo(packageManager, foundEntries.get(0).activityInfo);
+    }
+
+    /**
+     * creates intent with ACTION_MAIN and category CATEGORY_LAUNCHER to get all Activities
+     * witch specified package path that can be started using intent
+     * @return
+     */
+    private static List<ResolveInfo> queryForApps(PackageManager packageManager, String packageName){
+        List<ResolveInfo> foundEntries;
+        Intent intentToResolve = new Intent(Intent.ACTION_MAIN);
+        intentToResolve.addCategory(Intent.CATEGORY_LAUNCHER);
+        intentToResolve.setPackage(packageName);
+        foundEntries = packageManager.queryIntentActivities(intentToResolve, 0);
+        if (foundEntries == null || foundEntries.size() <= 0) {
+            return new ArrayList<>();
+        }
+        return foundEntries;
+    }
+
+    private static boolean isSystemPackage(ActivityInfo appInfo) {
         return ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) ? true : false;
     }
 
@@ -83,10 +117,6 @@ public class AppInfo implements  Comparable<AppInfo>{
         return icon;
     }
 
-    public Intent getLaunchIntent() {
-        return launchIntent;
-    }
-
     public void setAppLabel(String appLabel) {
         this.appLabel = appLabel;
     }
@@ -99,8 +129,8 @@ public class AppInfo implements  Comparable<AppInfo>{
         this.icon = icon;
     }
 
-    public void setLaunchIntent(Intent launchIntent) {
-        this.launchIntent = launchIntent;
+    private void prettyPrint() {
+        Log.d(AppInfo.class.getSimpleName(), appLabel + "\t" + packageName);
     }
 
     @Override

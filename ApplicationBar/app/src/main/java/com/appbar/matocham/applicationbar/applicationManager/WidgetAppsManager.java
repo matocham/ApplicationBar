@@ -38,12 +38,9 @@ public class WidgetAppsManager implements OnSwitchStateChangedListener {
         PackageManager packageManager = context.getPackageManager();
         List<AppInfo> widgetApps = new ArrayList<>();
         for (String app : apps) {
-            try {
-                AppInfo aInfo = AppInfo.getAppInfo(packageManager, packageManager.getApplicationInfo(app, 0));
+            AppInfo aInfo = AppInfo.getAppInfo(packageManager, app);
+            if(aInfo != null){
                 widgetApps.add(aInfo);
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-                removeAppFromWidget(app, context);
             }
         }
 

@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">ApplicationBar</string>
+    <string name="app_name">Application Bar</string>
+    <string name="app_loading_dialog_title">Ładowanie aplikacji</string>
+    <string name="app_loading_dialog_msg">Proszę czekać</string>
+    <string name="widget_no_apps_message">Brak\naplikacji</string>
+    <string name="dialog_positive_button">OK</string>
 </resources>

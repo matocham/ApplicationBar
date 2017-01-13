@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 
 import com.appbar.matocham.applicationbar.AppsDisplayActivity;
+import com.appbar.matocham.applicationbar.R;
 import com.appbar.matocham.applicationbar.Utils;
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
 
@@ -34,7 +35,8 @@ public class LoadAppsAsyncTask extends AsyncTask<Void, Void, List<AppInfo>> {
 
     @Override
     protected void onPreExecute() {
-        progress = Utils.showProgressDialog(context,"Ładowanie aplikacji", "Proszę czekać");
+        progress = Utils.getProgressDialog(context,context.getString(R.string.app_loading_dialog_title), context.getString(R.string.app_loading_dialog_msg));
+        progress.show();
         super.onPreExecute();
     }
 
