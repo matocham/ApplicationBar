@@ -29,7 +29,7 @@ public class BarWidgetProvider extends AppWidgetProvider {
             if(starAppIntent!=null){
                 context.startActivity(starAppIntent);
             } else {
-                WidgetAppsManager.removeAppFromWidget(packageName,context);
+                WidgetAppsManager.removeAppFromWidget(packageName,context); // eliminates exception throw when creating apps list
                 AppBarWidgetService.updateAdapter(context);
             }
         }
