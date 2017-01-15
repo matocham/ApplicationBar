@@ -3,14 +3,12 @@ package com.appbar.matocham.applicationbar.widget;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.widget.RemoteViews;
 
 import com.appbar.matocham.applicationbar.R;
-import com.appbar.matocham.applicationbar.Utils;
 import com.appbar.matocham.applicationbar.applicationManager.WidgetAppsManager;
 
 /**
@@ -20,16 +18,18 @@ import com.appbar.matocham.applicationbar.applicationManager.WidgetAppsManager;
 public class BarWidgetProvider extends AppWidgetProvider {
     public static final String LAUNCH_APP_ACTION = "com.appbar.matocha.applicationbar.LAUNCH_APP_ACTION";
     public static final String APP_ID = "com.appbar.matocha.applicationbar.LAUNCH_APP_ID";
+    public static final String WIDGET_ID = "com.appbar.matocha.applicationbar.WIDGET_ID";
 
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(LAUNCH_APP_ACTION)) {
             String packageName = intent.getStringExtra(APP_ID);
+            int widgetId = intent.getIntExtra(WIDGET_ID, -1);
             Intent starAppIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
-            if(starAppIntent!=null){
+            if (starAppIntent != null) {
                 context.startActivity(starAppIntent);
             } else {
-                WidgetAppsManager.removeAppFromWidget(packageName,context); // eliminates exception throw when creating apps list
+                WidgetAppsManager.removeAppFromWidget(packageName, widgetId, context); // eliminates exception throw when creating apps list
                 AppBarWidgetService.updateAdapter(context);
             }
         }

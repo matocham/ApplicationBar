@@ -6,40 +6,105 @@ import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.appbar.matocham.applicationbar.interfaces.OnSwitchStateChangedListener;
+import com.appbar.matocham.applicationbar.widget.AppBarWidgetService;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Mateusz on 10.01.2017
- *
+ * <p>
  * Class to manage adding and deleting apps from widget. Most methods are static and require context in parameters
  * , only one listen to switch changes in list
  */
 
-public class WidgetAppsManager implements OnSwitchStateChangedListener {
-    public static final String WIDGET_APPS_KEY = "matocham.applicationbar.WIDGET_APPS_KEY";
-    public static final String TAG="WidgetAppsManager";
-    private Context context;
+public class WidgetAppsManager {
+    public static final String TAG = "WidgetAppsManager";
 
-    public WidgetAppsManager(Context context) {
-        this.context = context;
+    private static Map<Integer, Widget> widgets = new HashMap<>();
+
+    public static void loadWidgets(Context context) {
+        loadWidgets(AppBarWidgetService.getAppWidgetIds(context), context);
     }
 
-    /**
-     * get apps added to display in widget
-     * @param context
-     * @return
-     */
-    public static List<AppInfo> getMarkedApps(Context context) {
-        String[] apps = getWigetAppsTable(context);
+    public static void loadWidgets(int[] widgetId, Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        for (int id : widgetId) {
+            Widget widget = retrive(preferences, id);
+            if (widget != null) {
+                widgets.put(id, widget);
+                Log.d(TAG, "Loaded widget with id " + id);
+            }
+        }
+    }
+
+    public static void add(int widgetId, Context context) {
+        Widget initialWidget = new Widget(widgetId);
+        widgets.put(widgetId, initialWidget);
+        initialWidget.store(PreferenceManager.getDefaultSharedPreferences(context));
+    }
+
+    public static void addAppToWidget(String appkey, int widgetId, Context context) {
+        Widget widget = getWidget(widgetId);
+        if (widget == null) {
+            widget = new Widget(widgetId);
+        }
+        widget.addApp(appkey);
+        Log.d(TAG, "Adding app " + appkey + " result is " + widget.getApplications().toString());
+        widget.store(PreferenceManager.getDefaultSharedPreferences(context));
+    }
+
+    public static void disposeWidget(int widgetId, Context context){
+        Widget widget = getWidget(widgetId);
+        widget.dispose(PreferenceManager.getDefaultSharedPreferences(context));
+    }
+
+    public static void removeAppFromWidget(String appkey, int widgetId, Context context) {
+        Widget widget = getWidget(widgetId);
+        if (widget == null) {
+            return;
+        }
+        widget.deleteApp(appkey);
+        Log.d(TAG,"removing app "+appkey+" result is "+widget.getApplications().toString());
+        widget.store(PreferenceManager.getDefaultSharedPreferences(context));
+    }
+
+    private static Widget retrive(SharedPreferences container, int widgetId) {
+        Widget widget = new Widget(container, widgetId);
+        if (widget.getId() == -1) {
+            return null;
+        }
+        return widget;
+    }
+
+    public static boolean hasWidget(int widgetId){
+        return widgets.containsKey(widgetId);
+    }
+
+    public static boolean isWidgetApp(String packageName, int widgetId) {
+        Widget widget = getWidget(widgetId);
+        Log.d(TAG,packageName+ " for widget "+widgetId+" is widget app? "+widget.isWigetApp(packageName));
+        if (widget != null) {
+            return widget.isWigetApp(packageName);
+        }
+        return false;
+    }
+
+    public static List<AppInfo> getMarkedApps(Context context, int widgetId) {
+        Widget widget = getWidget(widgetId);
+        if (widget == null) {
+            return new ArrayList<>();
+        }
+
         PackageManager packageManager = context.getPackageManager();
         List<AppInfo> widgetApps = new ArrayList<>();
-        for (String app : apps) {
+        for (String app : widget.getApplications()) {
             AppInfo aInfo = AppInfo.getAppInfo(packageManager, app);
-            if(aInfo != null){
+            if (aInfo != null) {
                 widgetApps.add(aInfo);
             }
         }
@@ -48,62 +113,7 @@ public class WidgetAppsManager implements OnSwitchStateChangedListener {
         return widgetApps;
     }
 
-    //****************** edit widget apps ************************
-    public static void addAppToWidget(String appkey, Context context) {
-        String apps = getWidgetAppsValues(context);
-        if (apps.contains(appkey)) {
-            return;
-        }
-        if(apps.length()!=0){
-            apps += ";";
-        }
-        apps += appkey;
-        Log.e(TAG,"adding "+appkey+" result "+apps);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        prefs.edit().putString(WIDGET_APPS_KEY, apps).commit();
-    }
-
-    public static void removeAppFromWidget(String appkey, Context context) {
-        String apps = getWidgetAppsValues(context);
-        if (!apps.contains(appkey)) {
-            return;
-        }
-        apps = apps.replace(appkey, "");
-        if(apps.startsWith(";")){
-            apps = apps.substring(1);
-        }
-        apps = apps.replace(";;", ";");
-        Log.e(TAG,"removing "+appkey+" result "+apps);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        prefs.edit().putString(WIDGET_APPS_KEY, apps).commit();
-    }
-
-    //****************** get widget apps ************************
-    public static String getWidgetAppsValues(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getString(WIDGET_APPS_KEY, "");
-    }
-
-
-    public static String[] getWigetAppsTable(Context context) {
-        String apps = getWidgetAppsValues(context);
-        return apps.split(";");
-    }
-
-    public static boolean isWigetApp(String appkey, Context context) {
-        String apps = getWidgetAppsValues(context);
-        Log.e(TAG,"is widget app? "+apps.contains(appkey));
-        return apps.contains(appkey);
-    }
-
-    //*************************************************************
-
-    @Override
-    public void switchChanged(AppInfo app, boolean state) {
-        if (state) {
-            addAppToWidget(app.toString(), context);
-        } else {
-            removeAppFromWidget(app.toString(), context);
-        }
+    public static Widget getWidget(int widgetId) {
+        return widgets.get(widgetId);
     }
 }

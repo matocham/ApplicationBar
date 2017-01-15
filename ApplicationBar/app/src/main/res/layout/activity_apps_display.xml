@@ -17,4 +17,12 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent">
     </ListView>
+
+    <TextView
+        android:id="@+id/no_widget_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="@string/no_widget_found"/>
 </FrameLayout>

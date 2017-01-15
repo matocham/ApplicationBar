@@ -23,7 +23,6 @@ public class AppsDisplayActivity extends AppCompatActivity implements AdapterVie
     ApplicationListAdapter adapter;
     ListView listView;
     List<AppInfo> apps;
-    WidgetAppsManager widgetAppManager;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -31,7 +30,7 @@ public class AppsDisplayActivity extends AppCompatActivity implements AdapterVie
                 adapter.clear();
                 adapter.addAll((List<AppInfo>) msg.obj);
                 adapter.notifyDataSetChanged();
-                    AppBarWidgetService.updateWidget(AppsDisplayActivity.this);
+                AppBarWidgetService.updateWidget(AppsDisplayActivity.this);
             }
             super.handleMessage(msg);
         }
@@ -41,16 +40,23 @@ public class AppsDisplayActivity extends AppCompatActivity implements AdapterVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apps_display);
-
         listView = (ListView) findViewById(R.id.listView1);
 
-        apps = new ArrayList<>();
-        widgetAppManager = new WidgetAppsManager(this);
+        int[] widgetIds = AppBarWidgetService.getAppWidgetIds(this);
+        if(widgetIds.length>0){
+            apps = new ArrayList<>();
 
-        adapter = new ApplicationListAdapter(this, R.layout.single_item_layout, apps, this);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(this);
-        new LoadAppsAsyncTask(this, handler, true).execute();
+            adapter = new ApplicationListAdapter(this, R.layout.single_item_layout, apps, this);
+            adapter.setWidgetId(widgetIds[0]);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(this);
+            new LoadAppsAsyncTask(this, handler, true).execute();
+            WidgetAppsManager.loadWidgets(this);
+            AppBarWidgetService.updateWidget(AppsDisplayActivity.this);
+        } else {
+            findViewById(R.id.no_widget_message).setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -63,7 +69,16 @@ public class AppsDisplayActivity extends AppCompatActivity implements AdapterVie
     public void onClick(View v) {
         Switch swx = (Switch) v;
         int position = listView.getPositionForView((View) swx.getParent());
-        widgetAppManager.switchChanged(adapter.getItem(position), swx.isChecked());
+        boolean state = swx.isChecked();
+        AppInfo app = adapter.getItem(position);
+        int[] widgetIds = AppBarWidgetService.getAppWidgetIds(this);
+        if (widgetIds.length > 0) {
+            if (state) {
+                WidgetAppsManager.addAppToWidget(app.toString(), widgetIds[0], this);
+            } else {
+                WidgetAppsManager.removeAppFromWidget(app.toString(), widgetIds[0], this);
+            }
+        }
     }
 
     @Override

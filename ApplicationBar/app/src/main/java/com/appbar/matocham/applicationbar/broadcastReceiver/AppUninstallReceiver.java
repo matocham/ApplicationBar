@@ -19,9 +19,13 @@ public class AppUninstallReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.e(TAG,"package removed: "+intent.getDataString());
         String packageName = intent.getDataString().substring(intent.getDataString().indexOf(":")+1);
-        if(WidgetAppsManager.isWigetApp(packageName,context)){
-            WidgetAppsManager.removeAppFromWidget(packageName,context); // eliminates exception throw when creating apps list
-            AppBarWidgetService.updateAdapter(context);
+        int[] widgetIds = AppBarWidgetService.getAppWidgetIds(context);
+
+        for(int widgetId : widgetIds){
+            if(WidgetAppsManager.isWidgetApp(packageName,widgetId)){
+                WidgetAppsManager.removeAppFromWidget(packageName,widgetId,context); // eliminates exception throw when creating apps list
+                AppBarWidgetService.updateAdapter(context);
+            }
         }
     }
 }

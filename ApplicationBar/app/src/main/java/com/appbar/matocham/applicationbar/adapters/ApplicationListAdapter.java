@@ -21,6 +21,7 @@ import java.util.List;
 
 public class ApplicationListAdapter extends ArrayAdapter<AppInfo>{
     private int layoutId;
+    private int widgetId;
     View.OnClickListener switchListener;
 
     public ApplicationListAdapter(Context context, int resource, List<AppInfo> apps, View.OnClickListener listener) {
@@ -57,9 +58,13 @@ public class ApplicationListAdapter extends ArrayAdapter<AppInfo>{
 
             if( inWidget != null){
                 inWidget.setOnClickListener(switchListener);
-                inWidget.setChecked(WidgetAppsManager.isWigetApp(appInfo.toString(),getContext()));
+                inWidget.setChecked(WidgetAppsManager.isWidgetApp(appInfo.toString(),widgetId));
             }
         }
         return view;
+    }
+
+    public void setWidgetId(int widgetId) {
+        this.widgetId = widgetId;
     }
 }

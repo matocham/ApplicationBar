@@ -32,23 +32,28 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
     public AppBarWidgetRemoteViewsFactory(Context context, Intent intent) {
         this.context = context;
         this.widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,-1);
-        Log.e(TAG,"WidgetID= "+widgetId);
+        if(!WidgetAppsManager.hasWidget(widgetId)){
+            Log.d(TAG,"New widget created with ID= "+widgetId);
+            WidgetAppsManager.add(widgetId, context);
+        }
+        Log.d(TAG,"WidgetID= "+widgetId);
     }
 
     @Override
     public void onCreate() {
-        markedApps = WidgetAppsManager.getMarkedApps(context);
+        markedApps = WidgetAppsManager.getMarkedApps(context, widgetId);
     }
 
     @Override
     public void onDataSetChanged() {
-        markedApps = WidgetAppsManager.getMarkedApps(context);
+        onCreate();
     }
 
     @Override
     public void onDestroy() {
         markedApps.clear();
-        Log.e(TAG,"Destroying widget with id "+widgetId);
+        WidgetAppsManager.disposeWidget(widgetId,context);
+        Log.d(TAG,"Destroying widget with id "+widgetId);
     }
 
     @Override
@@ -64,6 +69,7 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
 
         Bundle extras = new Bundle();
         extras.putString(BarWidgetProvider.APP_ID, appInfo.getPackageName());
+        extras.putInt(BarWidgetProvider.WIDGET_ID,widgetId);
         Intent fillInIntent = new Intent();
         fillInIntent.putExtras(extras);
 
