@@ -25,6 +25,7 @@ public class Widget {
     public Widget() {
         Log.d("WIDGET","CREATING EMPTY WIDGET");
         applications = new ArrayList<>();
+        label="";
     }
 
     ;

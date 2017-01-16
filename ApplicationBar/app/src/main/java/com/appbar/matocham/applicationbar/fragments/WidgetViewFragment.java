@@ -3,6 +3,7 @@ package com.appbar.matocham.applicationbar.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.appbar.matocham.applicationbar.adapters.ApplicationListAdapter;
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
 import com.appbar.matocham.applicationbar.applicationManager.WidgetAppsManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +25,7 @@ import java.util.List;
  */
 
 public class WidgetViewFragment extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener {
+    public static final String TAG = "WidgetViewFragment";
     List<AppInfo> availableApplications;
     int widgetId;
     ApplicationListAdapter adapter;
@@ -33,13 +36,21 @@ public class WidgetViewFragment extends Fragment implements AdapterView.OnItemCl
         WidgetViewFragment instance = new WidgetViewFragment();
         instance.availableApplications = applications;
         instance.widgetId = widgetId;
+        Log.d(TAG,"creating fragment by instance");
         return instance;
+    }
+
+    public WidgetViewFragment() {
+        Log.d(TAG,"Calling constructor");
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
+        if(availableApplications == null){
+            availableApplications = new ArrayList<>();
+        }
     }
 
     @Override

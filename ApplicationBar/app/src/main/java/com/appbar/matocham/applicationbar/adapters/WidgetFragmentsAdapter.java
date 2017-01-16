@@ -3,6 +3,7 @@ package com.appbar.matocham.applicationbar.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
 import com.appbar.matocham.applicationbar.applicationManager.WidgetAppsManager;
@@ -16,6 +17,7 @@ import java.util.List;
 
 public class WidgetFragmentsAdapter extends FragmentStatePagerAdapter{
 
+    public static final String TAG = "WidgetFragmentsAdapter";
     int[] widgets;
     List<AppInfo> applications;
 
@@ -23,6 +25,7 @@ public class WidgetFragmentsAdapter extends FragmentStatePagerAdapter{
         super(fm);
         this.widgets = widgets;
         this.applications = applications;
+        Log.d(TAG,"Created new fragment");
     }
 
     @Override

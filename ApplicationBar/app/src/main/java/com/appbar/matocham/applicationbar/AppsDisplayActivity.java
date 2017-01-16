@@ -3,9 +3,12 @@ package com.appbar.matocham.applicationbar;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -20,8 +23,11 @@ import java.util.List;
 
 public class AppsDisplayActivity extends AppCompatActivity {
     public static final int LOAD_FINISHED = 1;
-    List<AppInfo> apps;
+    private static final String TAG = "AppsDisplayActivity";
     ViewPager widgetViews;
+    private Toolbar toolbar;
+    private TabLayout tabLayout;
+
     WidgetFragmentsAdapter adapter;
     TextView noWidgetsView;
     int[] widgetIds;
@@ -30,13 +36,11 @@ public class AppsDisplayActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == LOAD_FINISHED) {
-                apps = (List<AppInfo>) msg.obj;
-                //adapter = new WidgetFragmentsAdapter(getSupportFragmentManager(), apps, widgetIds);
                 adapter.setWidgets(widgetIds);
-                adapter.setApplications(apps);
+                adapter.setApplications((List<AppInfo>) msg.obj);
                 adapter.notifyDataSetChanged();
-                //widgetViews.setAdapter(adapter);
                 AppBarWidgetService.updateWidget(AppsDisplayActivity.this);
+                widgetViews.setAdapter(adapter);
                 widgetViews.setVisibility(View.VISIBLE);
                 noWidgetsView.setVisibility(View.GONE);
             }
@@ -57,13 +61,20 @@ public class AppsDisplayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadWidgets();
+        Log.d(TAG,"creating activity");
         setContentView(R.layout.activity_apps_display);
-        apps = new ArrayList<>();
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         widgetViews = (ViewPager) findViewById(R.id.pager);
         widgetViews.setPageTransformer(true, new ZoomOutPageTransformer());
         noWidgetsView = (TextView) findViewById(R.id.no_widget_message);
-        adapter = new WidgetFragmentsAdapter(getSupportFragmentManager(),apps,new int[0]);
+        adapter = new WidgetFragmentsAdapter(getSupportFragmentManager(),new ArrayList<AppInfo>(),new int[0]);
         widgetViews.setAdapter(adapter);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(widgetViews);
     }
 
     @Override

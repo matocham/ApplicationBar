@@ -114,6 +114,9 @@ public class WidgetAppsManager {
     }
 
     public static Widget getWidget(int widgetId) {
+        if(!widgets.containsKey(widgetId)){
+            widgets.put(widgetId,new Widget(widgetId));
+        }
         return widgets.get(widgetId);
     }
 }
