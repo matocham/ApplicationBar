@@ -87,7 +87,7 @@ public class WidgetAppsManager {
 
     public static boolean isWidgetApp(String packageName, int widgetId) {
         Widget widget = getWidget(widgetId);
-        Log.d(TAG,packageName+ " for widget "+widgetId+" is widget app? "+widget.isWigetApp(packageName));
+        Log.d(TAG,packageName+ " for widget "+widgetId+" is widget app?");
         if (widget != null) {
             return widget.isWigetApp(packageName);
         }
