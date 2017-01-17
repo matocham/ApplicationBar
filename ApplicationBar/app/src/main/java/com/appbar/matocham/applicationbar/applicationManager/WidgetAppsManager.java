@@ -43,9 +43,12 @@ public class WidgetAppsManager {
     }
 
     public static void add(int widgetId, Context context) {
-        Widget initialWidget = new Widget(widgetId);
+        Widget initialWidget = new Widget(PreferenceManager.getDefaultSharedPreferences(context), widgetId);
+        if(initialWidget.getId() == -1){
+            initialWidget = new Widget(widgetId);
+            initialWidget.store(PreferenceManager.getDefaultSharedPreferences(context));
+        }
         widgets.put(widgetId, initialWidget);
-        initialWidget.store(PreferenceManager.getDefaultSharedPreferences(context));
     }
 
     public static void addAppToWidget(String appkey, int widgetId, Context context) {
@@ -114,7 +117,7 @@ public class WidgetAppsManager {
     }
 
     public static Widget getWidget(int widgetId) {
-        if(!widgets.containsKey(widgetId)){
+        if(!widgets.containsKey(widgetId)){ // TODO validate if required
             widgets.put(widgetId,new Widget(widgetId));
         }
         return widgets.get(widgetId);

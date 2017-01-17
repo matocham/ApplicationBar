@@ -18,12 +18,13 @@ public class Widget {
     public static final String APPLICATIONS_FIELD_NAME = "APPLICATIONS";
     public static final String APP_LIST_SEPARATOR = ";";
     public static final String WIDGET_APPS_KEY_PREFIX = "matocham.applicationbar.WIDGET_APPS_KEY_";
+    public static final String TAG = "Widget";
     private List<String> applications;
     private String label;
     private int id;
 
     public Widget() {
-        Log.d("WIDGET","CREATING EMPTY WIDGET");
+        Log.d(TAG,"CREATING EMPTY WIDGET");
         applications = new ArrayList<>();
         label="";
     }
@@ -34,6 +35,7 @@ public class Widget {
         this();
         Log.d("WIDGET","CREATING WIDGET with id");
         this.id = id;
+        label = "Widget "+id;
     }
 
     public Widget(SharedPreferences preferences, int id) {
@@ -42,13 +44,13 @@ public class Widget {
         this.label = preferences.getString(getStorageKey(WIDGET_APPS_KEY_PREFIX, LABEL_FIELD_NAME, id), "");
         String apps = preferences.getString(getStorageKey(WIDGET_APPS_KEY_PREFIX, APPLICATIONS_FIELD_NAME, id), "");
         restoreAppsList(apps);
-        Log.d("WIDGET",id+" "+label+" "+applications.toString());
+        Log.d(TAG,id+" "+label+" "+applications.toString());
     }
 
     public Widget(String label, int id) {
         this(id);
         this.label = label;
-        Log.d("WIDGET","CREATING WIDGET with label");
+        Log.d(TAG,"CREATING WIDGET with label");
     }
 
     public void dispose(SharedPreferences container) {
@@ -58,7 +60,7 @@ public class Widget {
     }
 
     public void store(SharedPreferences container) {
-        Log.d("WIDGET","storing widget "+applications.toString());
+        Log.d(TAG,"storing widget "+applications.toString());
         String storableApps = getAppsStorageStrig();
         container.edit().putString(getStorageKey(WIDGET_APPS_KEY_PREFIX, LABEL_FIELD_NAME, id), label)
                 .putString(getStorageKey(WIDGET_APPS_KEY_PREFIX, APPLICATIONS_FIELD_NAME, id), storableApps)
