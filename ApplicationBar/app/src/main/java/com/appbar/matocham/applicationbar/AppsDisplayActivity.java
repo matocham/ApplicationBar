@@ -9,6 +9,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,6 +19,7 @@ import com.appbar.matocham.applicationbar.adapters.WidgetFragmentsAdapter;
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
 import com.appbar.matocham.applicationbar.applicationManager.WidgetAppsManager;
 import com.appbar.matocham.applicationbar.asuncTasks.LoadAppsAsyncTask;
+import com.appbar.matocham.applicationbar.fragments.WidgetViewFragment;
 import com.appbar.matocham.applicationbar.widget.AppBarWidgetService;
 
 import java.util.ArrayList;
@@ -58,6 +62,27 @@ public class AppsDisplayActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if(AppBarWidgetService.getAppWidgetIds(this).length>0){
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.edit_menu, menu);
+            MenuItem item = menu.findItem(R.id.edit_widget);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.edit_widget){
+            //show dialog to edit widget label
+            WidgetViewFragment currentFragment = (WidgetViewFragment) adapter.getItem(widgetViews.getCurrentItem());
+            int currentWidget = currentFragment.getWidgetId();
+            Log.d(TAG,"Menu option selected for widget "+currentWidget);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadWidgets();
@@ -65,7 +90,7 @@ public class AppsDisplayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_apps_display);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         widgetViews = (ViewPager) findViewById(R.id.pager);
         widgetViews.setPageTransformer(true, new ZoomOutPageTransformer());

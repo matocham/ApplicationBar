@@ -86,4 +86,8 @@ public class WidgetViewFragment extends Fragment implements AdapterView.OnItemCl
         /*AppInfo info = adapter.getItem(position);
         startActivity(getPackageManager().getLaunchIntentForPackage(info.getPackageName()));*/
     }
+
+    public int getWidgetId() {
+        return widgetId;
+    }
 }

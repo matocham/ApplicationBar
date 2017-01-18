@@ -31,12 +31,12 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
 
     public AppBarWidgetRemoteViewsFactory(Context context, Intent intent) {
         this.context = context;
-        this.widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,-1);
-        if(!WidgetAppsManager.hasWidget(widgetId)){
-            Log.d(TAG,"New widget created with ID= "+widgetId);
+        this.widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+        if (!WidgetAppsManager.hasWidget(widgetId)) {
+            Log.d(TAG, "New widget created with ID= " + widgetId);
             WidgetAppsManager.add(widgetId, context);
         }
-        Log.d(TAG,"WidgetID= "+widgetId);
+        Log.d(TAG, "WidgetID= " + widgetId);
     }
 
     @Override
@@ -52,8 +52,8 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
     @Override
     public void onDestroy() {
         markedApps.clear();
-        WidgetAppsManager.disposeWidget(widgetId,context);
-        Log.d(TAG,"Destroying widget with id "+widgetId);
+        WidgetAppsManager.disposeWidget(widgetId, context);
+        Log.d(TAG, "Destroying widget with id " + widgetId);
     }
 
     @Override
@@ -69,11 +69,11 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
 
         Bundle extras = new Bundle();
         extras.putString(BarWidgetProvider.APP_ID, appInfo.getPackageName());
-        extras.putInt(BarWidgetProvider.WIDGET_ID,widgetId);
+        extras.putInt(BarWidgetProvider.WIDGET_ID, widgetId);
         Intent fillInIntent = new Intent();
         fillInIntent.putExtras(extras);
 
-        item.setOnClickFillInIntent(R.id.app_icon_widget,fillInIntent);
+        item.setOnClickFillInIntent(R.id.app_icon_widget, fillInIntent);
         return item;
     }
 
@@ -97,17 +97,17 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
         return true;
     }
 
-    private Bitmap drawableToBitmap (Drawable drawable) {
+    private Bitmap drawableToBitmap(Drawable drawable) {
         Bitmap bitmap = null;
 
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            if(bitmapDrawable.getBitmap() != null) {
+            if (bitmapDrawable.getBitmap() != null) {
                 return bitmapDrawable.getBitmap();
             }
         }
 
-        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+        if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
             bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
         } else {
             bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
