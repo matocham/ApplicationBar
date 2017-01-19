@@ -6,4 +6,9 @@
     <string name="dialog_positive_button">OK</string>
     <string name="no_widget_found">Brak widgetu</string>
     <string name="edit_widget_menu">Edit widget</string>
+    <string name="no_widget_name">Nazwa widgetu nie może być pusta</string>
+    <string name="widget_name">Nazwa</string>
+    <string name="ok_button_text">Ok</string>
+    <string name="cancel_button_text">Anuluj</string>
+    <string name="widget_edit_title">Edytuj</string>
 </resources>

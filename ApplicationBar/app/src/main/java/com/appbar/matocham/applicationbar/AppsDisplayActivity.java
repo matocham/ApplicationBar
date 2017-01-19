@@ -3,9 +3,10 @@ package com.appbar.matocham.applicationbar;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -13,24 +14,28 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appbar.matocham.applicationbar.adapters.WidgetFragmentsAdapter;
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
 import com.appbar.matocham.applicationbar.applicationManager.WidgetAppsManager;
 import com.appbar.matocham.applicationbar.asuncTasks.LoadAppsAsyncTask;
+import com.appbar.matocham.applicationbar.fragments.EditWidgetDialogFragment;
 import com.appbar.matocham.applicationbar.fragments.WidgetViewFragment;
 import com.appbar.matocham.applicationbar.widget.AppBarWidgetService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppsDisplayActivity extends AppCompatActivity {
+public class AppsDisplayActivity extends AppCompatActivity implements  OnDialogDissmissListener{
     public static final int LOAD_FINISHED = 1;
     private static final String TAG = "AppsDisplayActivity";
     ViewPager widgetViews;
     private Toolbar toolbar;
     private TabLayout tabLayout;
+    MenuItem item;
 
     WidgetFragmentsAdapter adapter;
     TextView noWidgetsView;
@@ -58,6 +63,9 @@ public class AppsDisplayActivity extends AppCompatActivity {
             new LoadAppsAsyncTask(this, handler, true).execute();
             WidgetAppsManager.loadWidgets(this);
             AppBarWidgetService.updateWidget(this);
+        } else{
+            item.setVisible(false);
+            invalidateOptionsMenu();
         }
     }
 
@@ -66,7 +74,7 @@ public class AppsDisplayActivity extends AppCompatActivity {
         if(AppBarWidgetService.getAppWidgetIds(this).length>0){
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.edit_menu, menu);
-            MenuItem item = menu.findItem(R.id.edit_widget);
+            item = menu.findItem(R.id.edit_widget);
         }
         return true;
     }
@@ -74,10 +82,7 @@ public class AppsDisplayActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.edit_widget){
-            //show dialog to edit widget label
-            WidgetViewFragment currentFragment = (WidgetViewFragment) adapter.getItem(widgetViews.getCurrentItem());
-            int currentWidget = currentFragment.getWidgetId();
-            Log.d(TAG,"Menu option selected for widget "+currentWidget);
+            showEditDialog();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -100,6 +105,41 @@ public class AppsDisplayActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(widgetViews);
+
+        configureTabsListener();
+    }
+
+    private void configureTabsListener() {
+        LinearLayout tabStrip = (LinearLayout) tabLayout.getChildAt(0);
+        tabStrip.setOnHierarchyChangeListener(getTabsHierarchyListener());
+    }
+
+    @NonNull
+    private ViewGroup.OnHierarchyChangeListener getTabsHierarchyListener() {
+        return new ViewGroup.OnHierarchyChangeListener() {
+            @Override
+            public void onChildViewAdded(View view, View view1) {
+                view1.setOnLongClickListener(getTabLongClickListener());
+                LinearLayout tabStrip = (LinearLayout) view;
+                view1.setTag(tabStrip.getChildCount());
+            }
+
+            @Override
+            public void onChildViewRemoved(View view, View view1) {
+            }
+        };
+    }
+
+    @NonNull
+    private View.OnLongClickListener getTabLongClickListener() {
+        return new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                AppsDisplayActivity.this.showEditDialog((Integer) view.getTag() - 1);
+                Log.d(TAG,"view with tag "+view.getTag()+" clicked");
+                return true;
+            }
+        };
     }
 
     @Override
@@ -108,4 +148,34 @@ public class AppsDisplayActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    private void showEditDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        EditWidgetDialogFragment loginDialogFragment = EditWidgetDialogFragment.getInstance(this, getCurrentWidgetIndex());
+        loginDialogFragment.show(fm, "fragment_edit");
+    }
+
+    private void showEditDialog(int index) {
+        FragmentManager fm = getSupportFragmentManager();
+        EditWidgetDialogFragment loginDialogFragment = EditWidgetDialogFragment.getInstance(this, getWidgetIdAtIndex(index));
+        loginDialogFragment.show(fm, "fragment_edit");
+    }
+
+    public int getCurrentWidgetIndex(){
+        return getWidgetIdAtIndex(widgetViews.getCurrentItem());
+    }
+
+    private int getWidgetIdAtIndex(int index){
+        WidgetViewFragment fragment = (WidgetViewFragment) adapter.getItem(index);
+        int widgetId = fragment.getWidgetId();
+        return widgetId;
+    }
+
+    @Override
+    public void dialogDissmissed() {
+        refreshTabs();
+    }
+
+    public void refreshTabs(){
+        adapter.notifyDataSetChanged();
+    }
 }

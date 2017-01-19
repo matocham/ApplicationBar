@@ -83,8 +83,8 @@ public class WidgetViewFragment extends Fragment implements AdapterView.OnItemCl
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        /*AppInfo info = adapter.getItem(position);
-        startActivity(getPackageManager().getLaunchIntentForPackage(info.getPackageName()));*/
+        AppInfo info = adapter.getItem(position);
+        startActivity(context.getPackageManager().getLaunchIntentForPackage(info.getPackageName()));
     }
 
     public int getWidgetId() {

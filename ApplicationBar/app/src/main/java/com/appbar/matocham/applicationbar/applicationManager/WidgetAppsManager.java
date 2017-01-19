@@ -61,6 +61,12 @@ public class WidgetAppsManager {
         widget.store(PreferenceManager.getDefaultSharedPreferences(context));
     }
 
+    public static void setWidgetLabel(String label, int widgetId, Context context){
+        Widget widget = getWidget(widgetId);
+        widget.setLabel(label);
+        widget.store(PreferenceManager.getDefaultSharedPreferences(context));
+    }
+
     public static void disposeWidget(int widgetId, Context context){
         Widget widget = getWidget(widgetId);
         widget.dispose(PreferenceManager.getDefaultSharedPreferences(context));
