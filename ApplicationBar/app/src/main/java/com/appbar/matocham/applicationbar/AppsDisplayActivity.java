@@ -63,9 +63,6 @@ public class AppsDisplayActivity extends AppCompatActivity implements  OnDialogD
             new LoadAppsAsyncTask(this, handler, true).execute();
             WidgetAppsManager.loadWidgets(this);
             AppBarWidgetService.updateWidget(this);
-        } else{
-            item.setVisible(false);
-            invalidateOptionsMenu();
         }
     }
 
