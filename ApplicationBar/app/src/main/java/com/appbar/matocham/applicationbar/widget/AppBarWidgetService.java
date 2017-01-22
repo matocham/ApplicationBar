@@ -20,13 +20,15 @@ public class AppBarWidgetService extends RemoteViewsService{
     public static final String TAG = "AppBarWidgetService";
 
     public static void updateAdapter(Context context) {
+        Log.d(TAG,"Updating widgets adapter data");
         int ids[] = getAppWidgetIds(context);
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.listView2);
     }
 
     public static void updateWidget(Context context) {
-        Intent intent = new Intent(context, BarWidgetProvider.class);
+        Log.d(TAG,"Updating widget data");
+        Intent intent = new Intent(context, AppBarWidgetProvider.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         int ids[] = getAppWidgetIds(context);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
@@ -34,7 +36,7 @@ public class AppBarWidgetService extends RemoteViewsService{
     }
 
     public static int[] getAppWidgetIds(Context context) {
-        int[] ids = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, BarWidgetProvider.class));
+        int[] ids = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, AppBarWidgetProvider.class));
         Log.e(TAG,"Widget ids list: " + Arrays.toString(ids));
         return ids;
     }

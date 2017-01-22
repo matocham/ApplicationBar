@@ -17,7 +17,7 @@
         </activity>
 
         <!-- app widget declaration -->
-        <receiver android:name=".widget.BarWidgetProvider">
+        <receiver android:name=".widget.AppBarWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

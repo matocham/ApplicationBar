@@ -5,6 +5,7 @@
     android:updatePeriodMillis="0"
     android:initialLayout="@layout/bar_widget_layout"
     android:resizeMode="vertical"
+
     android:widgetCategory="home_screen">
 </appwidget-provider>
 

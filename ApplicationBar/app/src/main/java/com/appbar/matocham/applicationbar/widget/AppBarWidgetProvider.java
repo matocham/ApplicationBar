@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.appbar.matocham.applicationbar.R;
@@ -15,10 +16,11 @@ import com.appbar.matocham.applicationbar.applicationManager.WidgetAppsManager;
  * Created by Mateusz on 10.01.2017.
  */
 
-public class BarWidgetProvider extends AppWidgetProvider {
+public class AppBarWidgetProvider extends AppWidgetProvider {
     public static final String LAUNCH_APP_ACTION = "com.appbar.matocha.applicationbar.LAUNCH_APP_ACTION";
     public static final String APP_ID = "com.appbar.matocha.applicationbar.LAUNCH_APP_ID";
     public static final String WIDGET_ID = "com.appbar.matocha.applicationbar.WIDGET_ID";
+    public static final String TAG="AppBarWidgetProvider";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -29,6 +31,7 @@ public class BarWidgetProvider extends AppWidgetProvider {
             if (starAppIntent != null) {
                 context.startActivity(starAppIntent);
             } else {
+                WidgetAppsManager.loadWidgets(context);
                 WidgetAppsManager.removeAppFromWidget(packageName, widgetId, context); // eliminates exception throw when creating apps list
                 AppBarWidgetService.updateAdapter(context);
             }
@@ -38,6 +41,7 @@ public class BarWidgetProvider extends AppWidgetProvider {
 
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
                          int[] appWidgetIds) {
+        Log.d(TAG,"Updating widgets");
         // update each of the app widgets with the remote adapter
         for (int i = 0; i < appWidgetIds.length; ++i) {
 
@@ -60,11 +64,11 @@ public class BarWidgetProvider extends AppWidgetProvider {
             // object above.
             rv.setEmptyView(R.id.listView2, R.id.empty_view);
 
-            Intent launchAppIntent = new Intent(context, BarWidgetProvider.class);
+            Intent launchAppIntent = new Intent(context, AppBarWidgetProvider.class);
             // Set the action for the intent.
             // When the user touches a particular view, it will have the effect of
             // broadcasting TOAST_ACTION.
-            launchAppIntent.setAction(BarWidgetProvider.LAUNCH_APP_ACTION);
+            launchAppIntent.setAction(AppBarWidgetProvider.LAUNCH_APP_ACTION);
             launchAppIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
             PendingIntent toastPendingIntent = PendingIntent.getBroadcast(context, 0, launchAppIntent,

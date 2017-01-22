@@ -41,11 +41,15 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
 
     @Override
     public void onCreate() {
+        Log.d(TAG,"Creating new widget - onCreate");
+        WidgetAppsManager.loadWidgets(context);
         markedApps = WidgetAppsManager.getMarkedApps(context, widgetId);
+        Log.d(TAG,"Fetched "+markedApps.size()+" apps");
     }
 
     @Override
     public void onDataSetChanged() {
+        Log.d(TAG,"Refreshing dataset");
         onCreate();
     }
 
@@ -68,8 +72,8 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
         item.setImageViewBitmap(R.id.app_icon_widget, drawableToBitmap(appInfo.getIcon()));
 
         Bundle extras = new Bundle();
-        extras.putString(BarWidgetProvider.APP_ID, appInfo.getPackageName());
-        extras.putInt(BarWidgetProvider.WIDGET_ID, widgetId);
+        extras.putString(AppBarWidgetProvider.APP_ID, appInfo.getPackageName());
+        extras.putInt(AppBarWidgetProvider.WIDGET_ID, widgetId);
         Intent fillInIntent = new Intent();
         fillInIntent.putExtras(extras);
 

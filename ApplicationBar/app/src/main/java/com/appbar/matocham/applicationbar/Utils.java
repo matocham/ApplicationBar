@@ -1,24 +1,12 @@
 package com.appbar.matocham.applicationbar;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Message;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.appbar.matocham.applicationbar.widget.BarWidgetProvider;
-
-import java.util.Arrays;
 
 /**
  * Created by Mateusz on 10.01.2017.
