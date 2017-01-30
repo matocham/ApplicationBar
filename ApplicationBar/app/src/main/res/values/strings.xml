@@ -13,4 +13,5 @@
     <string name="widget_edit_title">Edytuj</string>
     <string name="enter_widget_name">Wpisz nazwę widgetu</string>
     <string name="add_widget">Dodaj widget</string>
+    <string name="cancel">Anuluj</string>
 </resources>

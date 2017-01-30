@@ -64,6 +64,11 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
         finish();
     }
 
+    public void cancel(View v){
+        setNegativeResult();
+        finish();
+    }
+
     private void setNegativeResult(){
         Intent resultValue = new Intent();
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
