@@ -11,4 +11,6 @@
     <string name="ok_button_text">Ok</string>
     <string name="cancel_button_text">Anuluj</string>
     <string name="widget_edit_title">Edytuj</string>
+    <string name="enter_widget_name">Wpisz nazwę widgetu</string>
+    <string name="add_widget">Dodaj widget</string>
 </resources>

@@ -5,8 +5,6 @@
     android:updatePeriodMillis="0"
     android:initialLayout="@layout/bar_widget_layout"
     android:resizeMode="vertical"
-
+    android:configure="com.appbar.matocham.applicationbar.WidgetConfigurationActivity"
     android:widgetCategory="home_screen">
 </appwidget-provider>
-
-    <!--android:previewImage="@drawable/widget_prev"-->

@@ -14,7 +14,7 @@ import android.widget.RemoteViewsService;
 
 import com.appbar.matocham.applicationbar.R;
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
-import com.appbar.matocham.applicationbar.applicationManager.WidgetAppsManager;
+import com.appbar.matocham.applicationbar.applicationManager.WidgetsManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +32,9 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
     public AppBarWidgetRemoteViewsFactory(Context context, Intent intent) {
         this.context = context;
         this.widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-        if (!WidgetAppsManager.hasWidget(widgetId)) {
+        if (!WidgetsManager.hasWidget(widgetId)) {
             Log.d(TAG, "New widget created with ID= " + widgetId);
-            WidgetAppsManager.add(widgetId, context);
+            WidgetsManager.add(widgetId, context);
         }
         Log.d(TAG, "WidgetID= " + widgetId);
     }
@@ -42,8 +42,8 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
     @Override
     public void onCreate() {
         Log.d(TAG,"Creating new widget - onCreate");
-        WidgetAppsManager.loadWidgets(context);
-        markedApps = WidgetAppsManager.getMarkedApps(context, widgetId);
+        WidgetsManager.loadWidgets(context);
+        markedApps = WidgetsManager.getMarkedApps(context, widgetId);
         Log.d(TAG,"Fetched "+markedApps.size()+" apps");
     }
 
@@ -56,7 +56,7 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
     @Override
     public void onDestroy() {
         markedApps.clear();
-        WidgetAppsManager.disposeWidget(widgetId, context);
+        WidgetsManager.disposeWidget(widgetId, context);
         Log.d(TAG, "Destroying widget with id " + widgetId);
     }
 

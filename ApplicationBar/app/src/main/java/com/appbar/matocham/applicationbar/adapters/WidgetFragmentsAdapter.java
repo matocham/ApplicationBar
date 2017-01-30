@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
-import com.appbar.matocham.applicationbar.applicationManager.WidgetAppsManager;
+import com.appbar.matocham.applicationbar.applicationManager.WidgetsManager;
 import com.appbar.matocham.applicationbar.fragments.WidgetViewFragment;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class WidgetFragmentsAdapter extends FragmentStatePagerAdapter{
 
     @Override
     public CharSequence getPageTitle(int position) {
-        String title = WidgetAppsManager.getWidget(widgets[position]).getLabel();
+        String title = WidgetsManager.getWidget(widgets[position]).getLabel();
         if(title.length()==0){
             title = "Widget "+widgets[position];
         }

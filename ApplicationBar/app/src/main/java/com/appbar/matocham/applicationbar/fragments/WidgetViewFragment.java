@@ -10,12 +10,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Switch;
-import android.widget.TextView;
 
 import com.appbar.matocham.applicationbar.R;
 import com.appbar.matocham.applicationbar.adapters.ApplicationListAdapter;
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
-import com.appbar.matocham.applicationbar.applicationManager.WidgetAppsManager;
+import com.appbar.matocham.applicationbar.applicationManager.WidgetsManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,9 +74,9 @@ public class WidgetViewFragment extends Fragment implements AdapterView.OnItemCl
         boolean state = swx.isChecked();
         AppInfo app = adapter.getItem(position);
         if (state) {
-            WidgetAppsManager.addAppToWidget(app.toString(), widgetId, context);
+            WidgetsManager.addAppToWidget(app.toString(), widgetId, context);
         } else {
-            WidgetAppsManager.removeAppFromWidget(app.toString(), widgetId, context);
+            WidgetsManager.removeAppFromWidget(app.toString(), widgetId, context);
         }
     }
 

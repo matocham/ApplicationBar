@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.appbar.matocham.applicationbar.adapters.WidgetFragmentsAdapter;
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
-import com.appbar.matocham.applicationbar.applicationManager.WidgetAppsManager;
+import com.appbar.matocham.applicationbar.applicationManager.WidgetsManager;
 import com.appbar.matocham.applicationbar.asuncTasks.LoadAppsAsyncTask;
 import com.appbar.matocham.applicationbar.fragments.EditWidgetDialogFragment;
 import com.appbar.matocham.applicationbar.fragments.WidgetViewFragment;
@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AppsDisplayActivity extends AppCompatActivity implements  OnDialogDissmissListener{
-    public static final int LOAD_FINISHED = 1;
     private static final String TAG = "AppsDisplayActivity";
     ViewPager widgetViews;
     private Toolbar toolbar;
@@ -44,7 +43,7 @@ public class AppsDisplayActivity extends AppCompatActivity implements  OnDialogD
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == LOAD_FINISHED) {
+            if (msg.what == LoadAppsAsyncTask.LOAD_FINISHED) {
                 adapter.setWidgets(widgetIds);
                 adapter.setApplications((List<AppInfo>) msg.obj);
                 adapter.notifyDataSetChanged();
@@ -61,7 +60,7 @@ public class AppsDisplayActivity extends AppCompatActivity implements  OnDialogD
         widgetIds = AppBarWidgetService.getAppWidgetIds(this);
         if (widgetIds.length > 0) {
             new LoadAppsAsyncTask(this, handler, true).execute();
-            WidgetAppsManager.loadWidgets(this);
+            WidgetsManager.loadWidgets(this);
             AppBarWidgetService.updateWidget(this);
         }
     }

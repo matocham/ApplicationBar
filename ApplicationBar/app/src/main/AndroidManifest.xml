@@ -27,14 +27,26 @@
                 android:resource="@xml/bar_appwidget_info" />
         </receiver>
 
-        <service android:name=".widget.AppBarWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+        <service
+            android:name=".widget.AppBarWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <receiver android:name=".broadcastReceiver.AppUninstallReceiver" android:enabled="true" android:exported="true">
+        <receiver
+            android:name=".broadcastReceiver.AppUninstallReceiver"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
-                <data android:scheme="package"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".WidgetConfigurationActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
     </application>
+
 </manifest>

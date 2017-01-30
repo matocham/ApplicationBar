@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
 import com.appbar.matocham.applicationbar.R;
-import com.appbar.matocham.applicationbar.applicationManager.WidgetAppsManager;
+import com.appbar.matocham.applicationbar.applicationManager.WidgetsManager;
 
 import java.util.List;
 
@@ -58,7 +58,7 @@ public class ApplicationListAdapter extends ArrayAdapter<AppInfo>{
 
             if( inWidget != null){
                 inWidget.setOnClickListener(switchListener);
-                inWidget.setChecked(WidgetAppsManager.isWidgetApp(appInfo.toString(),widgetId));
+                inWidget.setChecked(WidgetsManager.isWidgetApp(appInfo.toString(),widgetId));
             }
         }
         return view;

@@ -14,10 +14,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.appbar.matocham.applicationbar.AppsDisplayActivity;
 import com.appbar.matocham.applicationbar.OnDialogDissmissListener;
 import com.appbar.matocham.applicationbar.R;
-import com.appbar.matocham.applicationbar.applicationManager.WidgetAppsManager;
+import com.appbar.matocham.applicationbar.applicationManager.WidgetsManager;
 
 /**
  * Created by Mateusz on 05.11.2016.
@@ -59,7 +58,7 @@ public class EditWidgetDialogFragment extends DialogFragment implements View.OnF
     }
 
     private void configureEditText() {
-        widgetNameEditText.setText(WidgetAppsManager.getWidget(widgetId).getLabel());
+        widgetNameEditText.setText(WidgetsManager.getWidget(widgetId).getLabel());
         widgetNameEditText.setOnFocusChangeListener(this);
         widgetNameEditText.getBackground().setColorFilter(getContext().getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
     }
@@ -72,7 +71,7 @@ public class EditWidgetDialogFragment extends DialogFragment implements View.OnF
                     errorMessage.setVisibility(View.VISIBLE);
                 } else {
                     String widgetLabel = widgetNameEditText.getText().toString().trim();
-                    WidgetAppsManager.setWidgetLabel(widgetLabel, widgetId, getContext());
+                    WidgetsManager.setWidgetLabel(widgetLabel, widgetId, getContext());
                     listener.dialogDissmissed();
                     dismiss();
                 }

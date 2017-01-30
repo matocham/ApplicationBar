@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 
-import com.appbar.matocham.applicationbar.AppsDisplayActivity;
 import com.appbar.matocham.applicationbar.R;
 import com.appbar.matocham.applicationbar.Utils;
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
@@ -17,6 +16,7 @@ import java.util.List;
  */
 
 public class LoadAppsAsyncTask extends AsyncTask<Void, Void, List<AppInfo>> {
+    public static final int LOAD_FINISHED = 1;
     Context context;
     Handler handler;
     boolean mode;
@@ -42,7 +42,7 @@ public class LoadAppsAsyncTask extends AsyncTask<Void, Void, List<AppInfo>> {
 
     @Override
     protected void onPostExecute(List<AppInfo> appInfos) {
-        handler.sendMessage(Utils.createMessage(AppsDisplayActivity.LOAD_FINISHED, appInfos));
+        handler.sendMessage(Utils.createMessage(LOAD_FINISHED, appInfos));
         progress.dismiss();
         super.onPostExecute(appInfos);
     }

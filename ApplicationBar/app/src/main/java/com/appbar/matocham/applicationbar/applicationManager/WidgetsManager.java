@@ -21,8 +21,8 @@ import java.util.Map;
  * , only one listen to switch changes in list
  */
 
-public class WidgetAppsManager {
-    public static final String TAG = "WidgetAppsManager";
+public class WidgetsManager {
+    public static final String TAG = "WidgetsManager";
 
     private static Map<Integer, Widget> widgets = new HashMap<>();
 
