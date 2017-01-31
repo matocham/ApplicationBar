@@ -23,10 +23,12 @@ public class ApplicationListAdapter extends ArrayAdapter<AppInfo>{
     private int layoutId;
     private int widgetId;
     View.OnClickListener switchListener;
+    WidgetsManager widgetsManager;
 
     public ApplicationListAdapter(Context context, int resource, List<AppInfo> apps, View.OnClickListener listener) {
         super(context, resource, apps);
 
+        widgetsManager = WidgetsManager.getInstance(context);
         this.switchListener = listener;
         this.layoutId = resource;
     }
@@ -58,7 +60,7 @@ public class ApplicationListAdapter extends ArrayAdapter<AppInfo>{
 
             if( inWidget != null){
                 inWidget.setOnClickListener(switchListener);
-                inWidget.setChecked(WidgetsManager.isWidgetApp(appInfo.toString(),widgetId));
+                inWidget.setChecked(widgetsManager.isWidgetApp(appInfo.toString(),widgetId));
             }
         }
         return view;

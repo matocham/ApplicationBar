@@ -91,7 +91,7 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
         EditText labelEditText = (EditText) findViewById(R.id.widget_label);
         String label = labelEditText.getText().toString();
         if(label.length() > 0){
-            WidgetsManager.setWidgetLabel(label,widgetId,this);
+            WidgetsManager.getInstance(this).setWidgetLabel(label,widgetId);
         }
     }
 }

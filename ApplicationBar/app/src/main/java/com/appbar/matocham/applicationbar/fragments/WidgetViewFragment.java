@@ -30,6 +30,7 @@ public class WidgetViewFragment extends Fragment implements AdapterView.OnItemCl
     ApplicationListAdapter adapter;
     ListView listView;
     Context context;
+    WidgetsManager widgetsManager;
 
     public static WidgetViewFragment getInstance(List<AppInfo> applications, int widgetId) {
         WidgetViewFragment instance = new WidgetViewFragment();
@@ -47,6 +48,7 @@ public class WidgetViewFragment extends Fragment implements AdapterView.OnItemCl
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
+        widgetsManager = WidgetsManager.getInstance(context);
         if(availableApplications == null){
             availableApplications = new ArrayList<>();
         }
@@ -74,9 +76,9 @@ public class WidgetViewFragment extends Fragment implements AdapterView.OnItemCl
         boolean state = swx.isChecked();
         AppInfo app = adapter.getItem(position);
         if (state) {
-            WidgetsManager.addAppToWidget(app.toString(), widgetId, context);
+            widgetsManager.addAppToWidget(app.toString(), widgetId);
         } else {
-            WidgetsManager.removeAppFromWidget(app.toString(), widgetId, context);
+            widgetsManager.removeAppFromWidget(app.toString(), widgetId);
         }
     }
 

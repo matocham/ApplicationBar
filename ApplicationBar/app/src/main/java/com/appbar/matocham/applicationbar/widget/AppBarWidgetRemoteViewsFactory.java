@@ -29,12 +29,15 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
     List<AppInfo> markedApps = new ArrayList<>();
     int widgetId;
 
+    WidgetsManager widgetsManager;
+
     public AppBarWidgetRemoteViewsFactory(Context context, Intent intent) {
         this.context = context;
+        widgetsManager = WidgetsManager.getInstance(context);
         this.widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-        if (!WidgetsManager.hasWidget(widgetId)) {
+        if (!widgetsManager.hasWidget(widgetId)) {
             Log.d(TAG, "New widget created with ID= " + widgetId);
-            WidgetsManager.add(widgetId, context);
+            widgetsManager.add(widgetId);
         }
         Log.d(TAG, "WidgetID= " + widgetId);
     }
@@ -42,8 +45,8 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
     @Override
     public void onCreate() {
         Log.d(TAG,"Creating new widget - onCreate");
-        WidgetsManager.loadWidgets(context);
-        markedApps = WidgetsManager.getMarkedApps(context, widgetId);
+        WidgetsManager.getInstance(context).loadWidgets();
+        markedApps = widgetsManager.getMarkedApps(widgetId);
         Log.d(TAG,"Fetched "+markedApps.size()+" apps");
     }
 
@@ -56,7 +59,7 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
     @Override
     public void onDestroy() {
         markedApps.clear();
-        WidgetsManager.disposeWidget(widgetId, context);
+        widgetsManager.disposeWidget(widgetId);
         Log.d(TAG, "Destroying widget with id " + widgetId);
     }
 

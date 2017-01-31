@@ -1,6 +1,7 @@
 package com.appbar.matocham.applicationbar.fragments;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -29,6 +30,7 @@ public class EditWidgetDialogFragment extends DialogFragment implements View.OnF
     Button ok, cancel;
     int widgetId;
     OnDialogDissmissListener listener;
+    WidgetsManager widgetsManager;
 
     public static EditWidgetDialogFragment getInstance(OnDialogDissmissListener listener, int widgetId) {
         EditWidgetDialogFragment instance = new EditWidgetDialogFragment();
@@ -37,6 +39,11 @@ public class EditWidgetDialogFragment extends DialogFragment implements View.OnF
         return instance;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        widgetsManager = WidgetsManager.getInstance(getContext());
+    }
 
     @Nullable
     @Override
@@ -58,7 +65,7 @@ public class EditWidgetDialogFragment extends DialogFragment implements View.OnF
     }
 
     private void configureEditText() {
-        widgetNameEditText.setText(WidgetsManager.getWidget(widgetId).getLabel());
+        widgetNameEditText.setText(widgetsManager.getWidget(widgetId).getLabel());
         widgetNameEditText.setOnFocusChangeListener(this);
         widgetNameEditText.getBackground().setColorFilter(getContext().getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
     }
@@ -71,7 +78,7 @@ public class EditWidgetDialogFragment extends DialogFragment implements View.OnF
                     errorMessage.setVisibility(View.VISIBLE);
                 } else {
                     String widgetLabel = widgetNameEditText.getText().toString().trim();
-                    WidgetsManager.setWidgetLabel(widgetLabel, widgetId, getContext());
+                    widgetsManager.setWidgetLabel(widgetLabel, widgetId);
                     listener.dialogDissmissed();
                     dismiss();
                 }

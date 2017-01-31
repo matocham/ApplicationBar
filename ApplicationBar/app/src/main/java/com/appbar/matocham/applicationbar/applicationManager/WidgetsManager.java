@@ -23,14 +23,24 @@ import java.util.Map;
 
 public class WidgetsManager {
     public static final String TAG = "WidgetsManager";
-
     private static Map<Integer, Widget> widgets = new HashMap<>();
 
-    public static void loadWidgets(Context context) {
-        loadWidgets(AppBarWidgetService.getAppWidgetIds(context), context);
+    private Context context;
+
+    public static WidgetsManager getInstance( Context context){
+        WidgetsManager manager = new WidgetsManager(context);
+        return  manager;
     }
 
-    public static void loadWidgets(int[] widgetId, Context context) {
+    private WidgetsManager(Context context){
+        this.context = context;
+    }
+
+    public void loadWidgets() {
+        loadWidgets(AppBarWidgetService.getAppWidgetIds(context));
+    }
+
+    public void loadWidgets(int[] widgetId) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         for (int id : widgetId) {
@@ -42,7 +52,7 @@ public class WidgetsManager {
         }
     }
 
-    public static void add(int widgetId, Context context) {
+    public void add(int widgetId) {
         Widget initialWidget = new Widget(PreferenceManager.getDefaultSharedPreferences(context), widgetId);
         if(initialWidget.getId() == -1){
             initialWidget = new Widget(widgetId);
@@ -51,7 +61,7 @@ public class WidgetsManager {
         widgets.put(widgetId, initialWidget);
     }
 
-    public static void addAppToWidget(String appkey, int widgetId, Context context) {
+    public void addAppToWidget(String appkey, int widgetId) {
         Widget widget = getWidget(widgetId);
         if (widget == null) {
             widget = new Widget(widgetId);
@@ -61,18 +71,18 @@ public class WidgetsManager {
         widget.store(PreferenceManager.getDefaultSharedPreferences(context));
     }
 
-    public static void setWidgetLabel(String label, int widgetId, Context context){
+    public void setWidgetLabel(String label, int widgetId){
         Widget widget = getWidget(widgetId);
         widget.setLabel(label);
         widget.store(PreferenceManager.getDefaultSharedPreferences(context));
     }
 
-    public static void disposeWidget(int widgetId, Context context){
+    public void disposeWidget(int widgetId){
         Widget widget = getWidget(widgetId);
         widget.dispose(PreferenceManager.getDefaultSharedPreferences(context));
     }
 
-    public static void removeAppFromWidget(String appkey, int widgetId, Context context) {
+    public void removeAppFromWidget(String appkey, int widgetId) {
         Widget widget = getWidget(widgetId);
         if (widget == null) {
             return;
@@ -82,7 +92,7 @@ public class WidgetsManager {
         widget.store(PreferenceManager.getDefaultSharedPreferences(context));
     }
 
-    private static Widget retrive(SharedPreferences container, int widgetId) {
+    private Widget retrive(SharedPreferences container, int widgetId) {
         Widget widget = new Widget(container, widgetId);
         if (widget.getId() == -1) {
             return null;
@@ -90,11 +100,11 @@ public class WidgetsManager {
         return widget;
     }
 
-    public static boolean hasWidget(int widgetId){
+    public boolean hasWidget(int widgetId){
         return widgets.containsKey(widgetId);
     }
 
-    public static boolean isWidgetApp(String packageName, int widgetId) {
+    public boolean isWidgetApp(String packageName, int widgetId) {
         Widget widget = getWidget(widgetId);
         Log.d(TAG,packageName+ " for widget "+widgetId+" is widget app?");
         if (widget != null) {
@@ -103,7 +113,7 @@ public class WidgetsManager {
         return false;
     }
 
-    public static List<AppInfo> getMarkedApps(Context context, int widgetId) {
+    public List<AppInfo> getMarkedApps(int widgetId) {
         Widget widget = getWidget(widgetId);
         if (widget == null) {
             return new ArrayList<>();
@@ -122,7 +132,7 @@ public class WidgetsManager {
         return widgetApps;
     }
 
-    public static Widget getWidget(int widgetId) {
+    public Widget getWidget(int widgetId) {
         if(!widgets.containsKey(widgetId)){ // TODO validate if required
             widgets.put(widgetId,new Widget(widgetId));
         }
