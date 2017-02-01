@@ -25,10 +25,10 @@ public class WidgetFragmentsAdapter extends FragmentStatePagerAdapter{
     List<AppInfo> applications;
     WidgetsManager widgetsManager;
 
-    public WidgetFragmentsAdapter(List<AppInfo> applications, Context context) {
-        super(((AppCompatActivity)context).getSupportFragmentManager()); // TODO edit!
-        widgetsManager = WidgetsManager.getInstance(context);
-        this.widgets = AppBarWidgetService.getAppWidgetIds(context);
+    public WidgetFragmentsAdapter(FragmentManager fragmentManager, List<AppInfo> applications, int[] widgets) {
+        super(fragmentManager); // TODO edit!
+        widgetsManager = WidgetsManager.getInstance();
+        this.widgets = widgets;
         this.applications = applications;
         Log.d(TAG,"Created new fragment");
     }

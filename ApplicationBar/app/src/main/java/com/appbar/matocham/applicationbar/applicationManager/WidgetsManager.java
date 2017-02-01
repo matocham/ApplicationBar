@@ -23,21 +23,29 @@ import java.util.Map;
 
 public class WidgetsManager {
     public static final String TAG = "WidgetsManager";
-    private static Map<Integer, Widget> widgets = new HashMap<>();
+    private static WidgetsManager instance;
 
+    private  Map<Integer, Widget> widgets = new HashMap<>();
     private Context context;
 
-    public static WidgetsManager getInstance( Context context){
-        WidgetsManager manager = new WidgetsManager(context);
-        return  manager;
+    public static WidgetsManager getInstance(){
+        if( instance == null){
+            instance = new WidgetsManager();
+        }
+        return  instance;
     }
 
-    private WidgetsManager(Context context){
-        this.context = context;
+    private WidgetsManager(){}
+
+    public static WidgetsManager withContext(Context context){
+        WidgetsManager manager = getInstance();
+        manager.context = context;
+        return manager;
     }
 
-    public void loadWidgets() {
+    public WidgetsManager loadWidgets() {
         loadWidgets(AppBarWidgetService.getAppWidgetIds(context));
+        return this;
     }
 
     public void loadWidgets(int[] widgetId) {

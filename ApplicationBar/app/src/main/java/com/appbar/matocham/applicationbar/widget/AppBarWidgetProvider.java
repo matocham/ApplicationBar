@@ -31,8 +31,7 @@ public class AppBarWidgetProvider extends AppWidgetProvider {
             if (starAppIntent != null) {
                 context.startActivity(starAppIntent);
             } else {
-                WidgetsManager widgetsManager = WidgetsManager.getInstance(context);
-                widgetsManager.loadWidgets();
+                WidgetsManager widgetsManager = WidgetsManager.withContext(context).loadWidgets();
                 widgetsManager.removeAppFromWidget(packageName, widgetId); // eliminates exception throw when creating apps list
                 AppBarWidgetService.updateAdapter(context);
             }

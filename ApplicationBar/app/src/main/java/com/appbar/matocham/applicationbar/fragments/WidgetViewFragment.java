@@ -48,7 +48,7 @@ public class WidgetViewFragment extends Fragment implements AdapterView.OnItemCl
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
-        widgetsManager = WidgetsManager.getInstance(context);
+        widgetsManager = WidgetsManager.withContext(context);
         if(availableApplications == null){
             availableApplications = new ArrayList<>();
         }

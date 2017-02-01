@@ -42,7 +42,7 @@ public class EditWidgetDialogFragment extends DialogFragment implements View.OnF
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        widgetsManager = WidgetsManager.getInstance(getContext());
+        widgetsManager = WidgetsManager.withContext(getContext());
     }
 
     @Nullable

@@ -27,6 +27,7 @@ import java.util.List;
 public class WidgetConfigurationActivity extends AppCompatActivity {
 
     int widgetId;
+    WidgetsManager widgetsManager;
 
     Handler handler = new Handler() {
         @Override
@@ -44,7 +45,7 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_widget_configuration);
-
+        widgetsManager = WidgetsManager.withContext(this);
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
@@ -91,7 +92,7 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
         EditText labelEditText = (EditText) findViewById(R.id.widget_label);
         String label = labelEditText.getText().toString();
         if(label.length() > 0){
-            WidgetsManager.getInstance(this).setWidgetLabel(label,widgetId);
+           widgetsManager.setWidgetLabel(label,widgetId);
         }
     }
 }

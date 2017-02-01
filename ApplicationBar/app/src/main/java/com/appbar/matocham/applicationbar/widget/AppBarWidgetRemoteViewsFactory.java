@@ -33,7 +33,7 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
 
     public AppBarWidgetRemoteViewsFactory(Context context, Intent intent) {
         this.context = context;
-        widgetsManager = WidgetsManager.getInstance(context);
+        widgetsManager = WidgetsManager.withContext(context).loadWidgets();
         this.widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
         if (!widgetsManager.hasWidget(widgetId)) {
             Log.d(TAG, "New widget created with ID= " + widgetId);
@@ -45,7 +45,7 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
     @Override
     public void onCreate() {
         Log.d(TAG,"Creating new widget - onCreate");
-        WidgetsManager.getInstance(context).loadWidgets();
+        widgetsManager.loadWidgets();
         markedApps = widgetsManager.getMarkedApps(widgetId);
         Log.d(TAG,"Fetched "+markedApps.size()+" apps");
     }

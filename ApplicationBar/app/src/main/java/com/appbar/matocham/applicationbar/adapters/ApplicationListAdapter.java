@@ -28,7 +28,7 @@ public class ApplicationListAdapter extends ArrayAdapter<AppInfo>{
     public ApplicationListAdapter(Context context, int resource, List<AppInfo> apps, View.OnClickListener listener) {
         super(context, resource, apps);
 
-        widgetsManager = WidgetsManager.getInstance(context);
+        widgetsManager = WidgetsManager.getInstance().withContext(context);
         this.switchListener = listener;
         this.layoutId = resource;
     }

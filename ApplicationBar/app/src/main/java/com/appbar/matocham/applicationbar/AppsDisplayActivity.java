@@ -62,7 +62,7 @@ public class AppsDisplayActivity extends AppCompatActivity implements  OnDialogD
         widgetIds = AppBarWidgetService.getAppWidgetIds(this);
         if (widgetIds.length > 0) {
             new LoadAppsAsyncTask(this, handler, true).execute();
-            WidgetsManager.getInstance(this).loadWidgets();
+            WidgetsManager.withContext(this).loadWidgets();
             AppBarWidgetService.updateWidget(this);
         }
     }
@@ -98,7 +98,7 @@ public class AppsDisplayActivity extends AppCompatActivity implements  OnDialogD
         widgetViews = (ViewPager) findViewById(R.id.pager);
         widgetViews.setPageTransformer(true, new ZoomOutPageTransformer());
         noWidgetsView = (TextView) findViewById(R.id.no_widget_message);
-        adapter = new WidgetFragmentsAdapter(new ArrayList<AppInfo>(),this);
+        adapter = new WidgetFragmentsAdapter(getSupportFragmentManager(), new ArrayList<AppInfo>(), widgetIds);
         widgetViews.setAdapter(adapter);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
