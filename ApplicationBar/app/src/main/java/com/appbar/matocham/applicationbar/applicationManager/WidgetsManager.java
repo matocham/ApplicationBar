@@ -129,8 +129,15 @@ public class WidgetsManager {
 
         PackageManager packageManager = context.getPackageManager();
         List<AppInfo> widgetApps = new ArrayList<>();
-        for (String app : widget.getApplications()) {
-            AppInfo aInfo = AppInfo.getAppInfo(packageManager, app);
+        for (AppElement app : widget.getApplications()) {
+            AppInfo aInfo = null;
+            if (!app.isDeleted()) {
+                aInfo = AppInfo.getAppInfo(packageManager, app.getName());
+            } else {
+                if(app.isObsolote()){
+                    removeAppFromWidget(app.getName(),widgetId);
+                }
+            }
             if (aInfo != null) {
                 widgetApps.add(aInfo);
             }
@@ -138,6 +145,26 @@ public class WidgetsManager {
 
         Collections.sort(widgetApps);
         return widgetApps;
+    }
+
+    public void markAsDeleted(String packageName, int widgetId){
+        Widget widget = getWidget(widgetId);
+        if (widget == null) {
+            return;
+        }
+        widget.markAsDeleted(packageName);
+        Log.d(TAG,"marking as removed app "+packageName+" result is "+widget.getApplications().toString());
+        widget.store(PreferenceManager.getDefaultSharedPreferences(context));
+    }
+
+    public void markAsFreshOrDelete(String packageName, int widgetId){
+        Widget widget = getWidget(widgetId);
+        if (widget == null) {
+            return;
+        }
+        widget.markAsFreshOrDelete(packageName);
+        Log.d(TAG,"marking as removed or updated app "+packageName+" result is "+widget.getApplications().toString());
+        widget.store(PreferenceManager.getDefaultSharedPreferences(context));
     }
 
     public Widget getWidget(int widgetId) {

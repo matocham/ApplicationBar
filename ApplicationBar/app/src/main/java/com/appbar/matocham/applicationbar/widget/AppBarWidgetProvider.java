@@ -32,7 +32,7 @@ public class AppBarWidgetProvider extends AppWidgetProvider {
                 context.startActivity(starAppIntent);
             } else {
                 WidgetsManager widgetsManager = WidgetsManager.withContext(context).loadWidgets();
-                widgetsManager.removeAppFromWidget(packageName, widgetId); // eliminates exception throw when creating apps list
+                widgetsManager.markAsDeleted(packageName, widgetId); // eliminates exception throw when creating apps list
                 AppBarWidgetService.updateAdapter(context);
             }
         }

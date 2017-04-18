@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.appbar.matocham.applicationbar.adapters.WidgetFragmentsAdapter;
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
 import com.appbar.matocham.applicationbar.applicationManager.WidgetsManager;
-import com.appbar.matocham.applicationbar.asuncTasks.LoadAppsAsyncTask;
+import com.appbar.matocham.applicationbar.asyncTasks.LoadAppsAsyncTask;
 import com.appbar.matocham.applicationbar.fragments.EditWidgetDialogFragment;
 import com.appbar.matocham.applicationbar.fragments.WidgetViewFragment;
 import com.appbar.matocham.applicationbar.widget.AppBarWidgetService;

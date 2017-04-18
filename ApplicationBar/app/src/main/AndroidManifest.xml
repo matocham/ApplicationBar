@@ -42,6 +42,16 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name=".broadcastReceiver.AppInstallReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_INSTALL" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
         <activity android:name=".WidgetConfigurationActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>

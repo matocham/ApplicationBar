@@ -23,7 +23,7 @@ public class AppUninstallReceiver extends BroadcastReceiver {
         WidgetsManager manager = WidgetsManager.withContext(context).loadWidgets();
         for(int widgetId : widgetIds){
             if(manager.isWidgetApp(packageName,widgetId)){
-                manager.removeAppFromWidget(packageName,widgetId); // eliminates exception throw when creating apps list
+                manager.markAsDeleted(packageName,widgetId); // eliminates exception throw when creating apps list
                 AppBarWidgetService.updateAdapter(context);
             }
         }

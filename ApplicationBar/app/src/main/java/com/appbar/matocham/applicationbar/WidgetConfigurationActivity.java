@@ -7,21 +7,16 @@ import android.os.Message;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RemoteViews;
 
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
-import com.appbar.matocham.applicationbar.applicationManager.Widget;
 import com.appbar.matocham.applicationbar.applicationManager.WidgetsManager;
-import com.appbar.matocham.applicationbar.asuncTasks.LoadAppsAsyncTask;
+import com.appbar.matocham.applicationbar.asyncTasks.LoadAppsAsyncTask;
 import com.appbar.matocham.applicationbar.fragments.WidgetViewFragment;
 import com.appbar.matocham.applicationbar.widget.AppBarWidgetProvider;
-import com.appbar.matocham.applicationbar.widget.AppBarWidgetService;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class WidgetConfigurationActivity extends AppCompatActivity {
