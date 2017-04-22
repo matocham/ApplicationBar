@@ -135,6 +135,7 @@ public class WidgetsManager {
                 aInfo = AppInfo.getAppInfo(packageManager, app.getName());
             } else {
                 if(app.isObsolote()){
+                    Log.d(TAG,"App "+app.getName()+" is obsolote and will be removed");
                     removeAppFromWidget(app.getName(),widgetId);
                 }
             }
@@ -162,6 +163,7 @@ public class WidgetsManager {
         if (widget == null) {
             return;
         }
+        Log.d(TAG,"marking as removed or updated app "+packageName);
         widget.markAsFreshOrDelete(packageName);
         Log.d(TAG,"marking as removed or updated app "+packageName+" result is "+widget.getApplications().toString());
         widget.store(PreferenceManager.getDefaultSharedPreferences(context));

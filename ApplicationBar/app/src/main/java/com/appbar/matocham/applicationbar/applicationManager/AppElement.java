@@ -44,7 +44,7 @@ public class AppElement {
     }
 
     public boolean isObsolote() {
-        return (System.currentTimeMillis()-getDeleteTimestamp()<MAX_PEROID);
+        return (System.currentTimeMillis()-getDeleteTimestamp()>MAX_PEROID);
     }
 
     @Override

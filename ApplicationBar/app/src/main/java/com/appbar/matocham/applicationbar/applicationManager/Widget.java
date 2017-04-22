@@ -6,6 +6,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Mateusz on 15.01.2017.
@@ -19,13 +20,13 @@ public class Widget {
     public static final String APP_LIST_SEPARATOR = ";";
     public static final String WIDGET_APPS_KEY_PREFIX = "matocham.applicationbar.WIDGET_APPS_KEY_";
     public static final String TAG = "Widget";
-    private List<AppElement> applications;
+    private CopyOnWriteArrayList<AppElement> applications;
     private String label;
     private int id;
 
     public Widget() {
         Log.d(TAG, "CREATING EMPTY WIDGET");
-        applications = new ArrayList<>();
+        applications = new CopyOnWriteArrayList<>();
         label = "";
     }
 
@@ -56,7 +57,7 @@ public class Widget {
     public void dispose(SharedPreferences container) {
         container.edit().remove(getStorageKey(WIDGET_APPS_KEY_PREFIX, ID_FIELD_NAME, id))
                 .remove(getStorageKey(WIDGET_APPS_KEY_PREFIX, APPLICATIONS_FIELD_NAME, id))
-                .remove(getStorageKey(WIDGET_APPS_KEY_PREFIX, LABEL_FIELD_NAME, id)).commit();
+                .remove(getStorageKey(WIDGET_APPS_KEY_PREFIX, LABEL_FIELD_NAME, id)).apply();
     }
 
     public void store(SharedPreferences container) {
@@ -64,7 +65,7 @@ public class Widget {
         String storableApps = getAppsStorageStrig();
         container.edit().putString(getStorageKey(WIDGET_APPS_KEY_PREFIX, LABEL_FIELD_NAME, id), label)
                 .putString(getStorageKey(WIDGET_APPS_KEY_PREFIX, APPLICATIONS_FIELD_NAME, id), storableApps)
-                .putInt(getStorageKey(WIDGET_APPS_KEY_PREFIX, ID_FIELD_NAME, id), id).commit();
+                .putInt(getStorageKey(WIDGET_APPS_KEY_PREFIX, ID_FIELD_NAME, id), id).apply();
     }
 
     public void addApp(String appPackageName) {
@@ -81,16 +82,20 @@ public class Widget {
         if (isWigetApp(appPackageName)) {
             AppElement appElement = applications.get(applications.indexOf(new AppElement(appPackageName, 0)));
             appElement.setDeleteTimestamp(System.currentTimeMillis());
+            Log.d(TAG,"App "+appPackageName+" marked as deleted "+appElement.getDeleteTimestamp());
         }
     }
 
     public void markAsFreshOrDelete(String appPackageName) {
         boolean hasElement = applications.contains(new AppElement(appPackageName, 0));
+        Log.d(TAG, "app "+appPackageName+" belongs to widget? "+hasElement);
         if (hasElement) {
             AppElement appElement = applications.get(applications.indexOf(new AppElement(appPackageName, 0)));
             if (appElement.isObsolote()) {
                 deleteApp(appPackageName);
+                Log.d(TAG,"Deleted "+appPackageName);
             } else {
+                Log.d(TAG,"Updated "+appPackageName);
                 appElement.setDeleteTimestamp(0);
             }
         }
@@ -117,8 +122,8 @@ public class Widget {
     }
 
     private void restoreAppsList(String appPackages) {
-        applications = new ArrayList<>();
-
+        applications = new CopyOnWriteArrayList<>();
+        Log.d(TAG, "Packages string: "+appPackages);
         String[] splittedApps = appPackages.split(APP_LIST_SEPARATOR);
         for (String appElement : splittedApps) {
             AppElement element = new AppElement(appElement);
@@ -128,10 +133,6 @@ public class Widget {
 
     public List<AppElement> getApplications() {
         return applications;
-    }
-
-    public void setApplications(List<AppElement> applications) {
-        this.applications = applications;
     }
 
     public String getLabel() {

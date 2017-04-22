@@ -18,7 +18,7 @@ public class AppInstallReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e(TAG, "package installed: " + intent.getDataString());
+        Log.e(TAG, "package installed: " + intent.getDataString() +" action: "+intent.getAction());
         String packageName = intent.getDataString().substring(intent.getDataString().indexOf(":") + 1);
         int[] widgetIds = AppBarWidgetService.getAppWidgetIds(context);
         WidgetsManager manager = WidgetsManager.withContext(context).loadWidgets();
