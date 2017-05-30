@@ -104,18 +104,6 @@ public class AppInfo implements  Comparable<AppInfo>{
         return newInfo;
     }
 
-    public static List<AppInfo> convert(List<AppElement> apps, Context context){
-        PackageManager packageManager = context.getPackageManager();
-        List<AppInfo> converted = new ArrayList<>();
-
-        for (AppElement app : apps) {
-            AppInfo aInfo = AppInfo.getAppInfo(packageManager, app.getName());
-            converted.add(aInfo);
-        }
-        Collections.sort(converted);
-        return converted;
-    }
-
     public String getAppLabel() {
         return appLabel;
     }
@@ -146,7 +134,7 @@ public class AppInfo implements  Comparable<AppInfo>{
 
     @Override
     public int compareTo(AppInfo another) {
-        return appLabel.compareTo(another.appLabel);
+        return appLabel.compareToIgnoreCase(another.appLabel);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.appbar.matocham.applicationbar.widget;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,10 +14,12 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.appbar.matocham.applicationbar.R;
+import com.appbar.matocham.applicationbar.applicationManager.AppElement;
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
-import com.appbar.matocham.applicationbar.applicationManager.WidgetsManager;
+import com.appbar.matocham.applicationbar.applicationManager.NewWidgetManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,24 +32,19 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
     List<AppInfo> markedApps = new ArrayList<>();
     int widgetId;
 
-    WidgetsManager widgetsManager;
+    NewWidgetManager widgetsManager;
 
     public AppBarWidgetRemoteViewsFactory(Context context, Intent intent) {
         this.context = context;
-        widgetsManager = WidgetsManager.withContext(context).loadWidgets();
+        widgetsManager = new NewWidgetManager(context);
         this.widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-        if (!widgetsManager.hasWidget(widgetId)) {
-            Log.d(TAG, "New widget created with ID= " + widgetId);
-            widgetsManager.add(widgetId);
-        }
         Log.d(TAG, "WidgetID= " + widgetId);
     }
 
     @Override
     public void onCreate() {
         Log.d(TAG,"Creating new widget - onCreate");
-        widgetsManager.loadWidgets();
-        markedApps = widgetsManager.getMarkedApps(widgetId);
+        markedApps = convert(widgetsManager.getValidApps(widgetId));
         Log.d(TAG,"Fetched "+markedApps.size()+" apps");
     }
 
@@ -59,7 +57,7 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
     @Override
     public void onDestroy() {
         markedApps.clear();
-        widgetsManager.disposeWidget(widgetId);
+        widgetsManager.remove(widgetId);
         Log.d(TAG, "Destroying widget with id " + widgetId);
     }
 
@@ -123,5 +121,17 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
+    }
+
+    private List<AppInfo> convert(List<AppElement> apps){
+        PackageManager packageManager = context.getPackageManager();
+        List<AppInfo> converted = new ArrayList<>();
+
+        for (AppElement app : apps) {
+            AppInfo aInfo = AppInfo.getAppInfo(packageManager, app.getName());
+            converted.add(aInfo);
+        }
+        Collections.sort(converted);
+        return converted;
     }
 }

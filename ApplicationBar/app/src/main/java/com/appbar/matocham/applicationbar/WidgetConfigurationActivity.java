@@ -2,17 +2,17 @@ package com.appbar.matocham.applicationbar;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RemoteViews;
 
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
-import com.appbar.matocham.applicationbar.applicationManager.WidgetsManager;
+import com.appbar.matocham.applicationbar.applicationManager.NewWidgetManager;
 import com.appbar.matocham.applicationbar.asyncTasks.LoadAppsAsyncTask;
 import com.appbar.matocham.applicationbar.fragments.WidgetViewFragment;
 import com.appbar.matocham.applicationbar.widget.AppBarWidgetProvider;
@@ -22,15 +22,15 @@ import java.util.List;
 public class WidgetConfigurationActivity extends AppCompatActivity {
 
     int widgetId;
-    WidgetsManager widgetsManager;
+    NewWidgetManager widgetsManager;
 
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == LoadAppsAsyncTask.LOAD_FINISHED) {
-                WidgetViewFragment appsFragment = WidgetViewFragment.getInstance((List<AppInfo>) msg.obj,widgetId);
+                WidgetViewFragment appsFragment = WidgetViewFragment.getInstance((List<AppInfo>) msg.obj, widgetId);
                 FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.apps_fragment,appsFragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.apps_fragment, appsFragment).commit();
             }
             super.handleMessage(msg);
         }
@@ -40,7 +40,7 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_widget_configuration);
-        widgetsManager = WidgetsManager.withContext(this);
+        widgetsManager = new NewWidgetManager(this);
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
@@ -53,25 +53,25 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
         setNegativeResult();
     }
 
-    public void submitConfiguration(View v){
+    public void submitConfiguration(View v) {
         setWidgetLabel();
         configureWidget();
         setPositiveResult();
         finish();
     }
 
-    public void cancel(View v){
+    public void cancel(View v) {
         setNegativeResult();
         finish();
     }
 
-    private void setNegativeResult(){
+    private void setNegativeResult() {
         Intent resultValue = new Intent();
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
         setResult(RESULT_CANCELED, resultValue);
     }
 
-    private void setPositiveResult(){
+    private void setPositiveResult() {
         Intent resultValue = new Intent();
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
         setResult(RESULT_OK, resultValue);
@@ -83,11 +83,12 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
         appWidgetManager.updateAppWidget(widgetId, initialView);
     }
 
-    private void setWidgetLabel(){
+    private void setWidgetLabel() {
         EditText labelEditText = (EditText) findViewById(R.id.widget_label);
-        String label = labelEditText.getText().toString();
-        if(label.length() > 0){
-           widgetsManager.setWidgetLabel(label,widgetId);
+        String label = labelEditText.getText().toString().trim();
+        if (label.length() > 0) {
+            widgetsManager.getWidget(widgetId).setLabel(label);
+            widgetsManager.store();
         }
     }
 }

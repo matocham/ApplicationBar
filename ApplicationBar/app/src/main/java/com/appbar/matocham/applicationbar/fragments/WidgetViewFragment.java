@@ -14,7 +14,7 @@ import android.widget.Switch;
 import com.appbar.matocham.applicationbar.R;
 import com.appbar.matocham.applicationbar.adapters.ApplicationListAdapter;
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
-import com.appbar.matocham.applicationbar.applicationManager.WidgetsManager;
+import com.appbar.matocham.applicationbar.applicationManager.NewWidgetManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class WidgetViewFragment extends Fragment implements AdapterView.OnItemCl
     ApplicationListAdapter adapter;
     ListView listView;
     Context context;
-    WidgetsManager widgetsManager;
+    NewWidgetManager widgetsManager;
 
     public static WidgetViewFragment getInstance(List<AppInfo> applications, int widgetId) {
         WidgetViewFragment instance = new WidgetViewFragment();
@@ -48,7 +48,7 @@ public class WidgetViewFragment extends Fragment implements AdapterView.OnItemCl
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
-        widgetsManager = WidgetsManager.withContext(context);
+        widgetsManager = new NewWidgetManager(context);
         if(availableApplications == null){
             availableApplications = new ArrayList<>();
         }
@@ -76,9 +76,9 @@ public class WidgetViewFragment extends Fragment implements AdapterView.OnItemCl
         boolean state = swx.isChecked();
         AppInfo app = adapter.getItem(position);
         if (state) {
-            widgetsManager.addAppToWidget(app.toString(), widgetId);
+            widgetsManager.addApp(app.toString(), widgetId);
         } else {
-            widgetsManager.removeAppFromWidget(app.toString(), widgetId);
+            widgetsManager.removeApp(app.toString(), widgetId);
         }
     }
 

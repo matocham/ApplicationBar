@@ -4,14 +4,14 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
-import com.appbar.matocham.applicationbar.applicationManager.WidgetsManager;
+import com.appbar.matocham.applicationbar.applicationManager.NewWidgetManager;
 import com.appbar.matocham.applicationbar.fragments.WidgetViewFragment;
 import com.appbar.matocham.applicationbar.widget.AppBarWidgetService;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,13 +23,13 @@ public class WidgetFragmentsAdapter extends FragmentStatePagerAdapter{
     public static final String TAG = "WidgetFragmentsAdapter";
     int[] widgets;
     List<AppInfo> applications;
-    WidgetsManager widgetsManager;
+    NewWidgetManager widgetsManager;
 
-    public WidgetFragmentsAdapter(FragmentManager fragmentManager, List<AppInfo> applications, int[] widgets) {
-        super(fragmentManager); // TODO edit!
-        widgetsManager = WidgetsManager.getInstance();
-        this.widgets = widgets;
-        this.applications = applications;
+    public WidgetFragmentsAdapter(FragmentManager fragmentManager, Context context) {
+        super(fragmentManager);
+        widgetsManager = new NewWidgetManager(context);
+        this.widgets = AppBarWidgetService.getAppWidgetIds(context);
+        this.applications = Collections.emptyList();
         Log.d(TAG,"Created new fragment");
     }
 

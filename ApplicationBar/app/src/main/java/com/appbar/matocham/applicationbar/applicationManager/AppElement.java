@@ -10,11 +10,15 @@ public class AppElement {
     public static final String DELIMITER = "#";
     private static final int MAX_PEROID = 1000 * 60 * 20;
     private String name;
-    private long deleteTimestamp;
+    private long removeTimestamp;
 
-    public AppElement(String name, int deleteTimestamp) {
+    public AppElement(){
+        //constructor used by Jackson
+    }
+
+    public AppElement(String name, int RemoveTimestamp) {
         this.name = name;
-        this.deleteTimestamp = deleteTimestamp;
+        this.removeTimestamp = RemoveTimestamp;
     }
 
     @Deprecated
@@ -22,7 +26,7 @@ public class AppElement {
         String[] parts = parsed.split(DELIMITER);
         name = parts[0];
         if (parts.length > 1) {
-            deleteTimestamp = Long.parseLong(parts[1]);
+            removeTimestamp = Long.parseLong(parts[1]);
         }
     }
 
@@ -34,35 +38,35 @@ public class AppElement {
         this.name = name;
     }
 
-    public long getDeleteTimestamp() {
-        return deleteTimestamp;
+    public long getRemoveTimestamp() {
+        return removeTimestamp;
     }
 
-    public void setDeleteTimestamp(long deleteTimestamp) {
-        this.deleteTimestamp = deleteTimestamp;
+    public void setRemoveTimestamp(long removeTimestamp) {
+        this.removeTimestamp = removeTimestamp;
     }
 
     @JsonIgnore
-    public boolean isDeleted() {
-        return deleteTimestamp != 0;
+    public boolean isRemoved() {
+        return removeTimestamp != 0;
     }
 
     @JsonIgnore
     public boolean isObsolote() {
-        return isDeleted() && (System.currentTimeMillis() - getDeleteTimestamp() > MAX_PEROID);
+        return isRemoved() && (System.currentTimeMillis() - getRemoveTimestamp() > MAX_PEROID);
     }
 
     public void markAsRemoved() {
-        deleteTimestamp = System.currentTimeMillis();
+        removeTimestamp = System.currentTimeMillis();
     }
 
     public void markAsValid() {
-        deleteTimestamp = 0;
+        removeTimestamp = 0;
     }
 
     @Override
     public String toString() {
-        return name + DELIMITER + deleteTimestamp;
+        return name + DELIMITER + removeTimestamp;
     }
 
     @Override

@@ -20,16 +20,14 @@ import android.widget.TextView;
 
 import com.appbar.matocham.applicationbar.adapters.WidgetFragmentsAdapter;
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
-import com.appbar.matocham.applicationbar.applicationManager.WidgetsManager;
 import com.appbar.matocham.applicationbar.asyncTasks.LoadAppsAsyncTask;
 import com.appbar.matocham.applicationbar.fragments.EditWidgetDialogFragment;
 import com.appbar.matocham.applicationbar.fragments.WidgetViewFragment;
 import com.appbar.matocham.applicationbar.widget.AppBarWidgetService;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class AppsDisplayActivity extends AppCompatActivity implements  OnDialogDissmissListener{
+public class AppsDisplayActivity extends AppCompatActivity implements OnDialogDissmissListener {
     private static final String TAG = "AppsDisplayActivity";
     ViewPager widgetViews;
     private Toolbar toolbar;
@@ -39,8 +37,6 @@ public class AppsDisplayActivity extends AppCompatActivity implements  OnDialogD
     WidgetFragmentsAdapter adapter;
     TextView noWidgetsView;
     int[] widgetIds;
-
-    WidgetsManager widgetsManager;
 
     Handler handler = new Handler() {
         @Override
@@ -62,14 +58,13 @@ public class AppsDisplayActivity extends AppCompatActivity implements  OnDialogD
         widgetIds = AppBarWidgetService.getAppWidgetIds(this);
         if (widgetIds.length > 0) {
             new LoadAppsAsyncTask(this, handler, true).execute();
-            WidgetsManager.withContext(this).loadWidgets();
             AppBarWidgetService.updateWidget(this);
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(AppBarWidgetService.getAppWidgetIds(this).length>0){
+        if (AppBarWidgetService.getAppWidgetIds(this).length > 0) {
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.edit_menu, menu);
             item = menu.findItem(R.id.edit_widget);
@@ -79,7 +74,7 @@ public class AppsDisplayActivity extends AppCompatActivity implements  OnDialogD
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.edit_widget){
+        if (item.getItemId() == R.id.edit_widget) {
             showEditDialog();
         }
         return super.onOptionsItemSelected(item);
@@ -89,7 +84,7 @@ public class AppsDisplayActivity extends AppCompatActivity implements  OnDialogD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadWidgets();
-        Log.d(TAG,"creating activity");
+        Log.d(TAG, "creating activity");
         setContentView(R.layout.activity_apps_display);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -98,7 +93,7 @@ public class AppsDisplayActivity extends AppCompatActivity implements  OnDialogD
         widgetViews = (ViewPager) findViewById(R.id.pager);
         widgetViews.setPageTransformer(true, new ZoomOutPageTransformer());
         noWidgetsView = (TextView) findViewById(R.id.no_widget_message);
-        adapter = new WidgetFragmentsAdapter(getSupportFragmentManager(), new ArrayList<AppInfo>(), widgetIds);
+        adapter = new WidgetFragmentsAdapter(getSupportFragmentManager(), this);
         widgetViews.setAdapter(adapter);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -134,7 +129,7 @@ public class AppsDisplayActivity extends AppCompatActivity implements  OnDialogD
             @Override
             public boolean onLongClick(View view) {
                 AppsDisplayActivity.this.showEditDialog((Integer) view.getTag() - 1);
-                Log.d(TAG,"view with tag "+view.getTag()+" clicked");
+                Log.d(TAG, "view with tag " + view.getTag() + " clicked");
                 return true;
             }
         };
@@ -158,11 +153,11 @@ public class AppsDisplayActivity extends AppCompatActivity implements  OnDialogD
         loginDialogFragment.show(fm, "fragment_edit");
     }
 
-    public int getCurrentWidgetIndex(){
+    public int getCurrentWidgetIndex() {
         return getWidgetIdAtIndex(widgetViews.getCurrentItem());
     }
 
-    private int getWidgetIdAtIndex(int index){
+    private int getWidgetIdAtIndex(int index) {
         WidgetViewFragment fragment = (WidgetViewFragment) adapter.getItem(index);
         int widgetId = fragment.getWidgetId();
         return widgetId;
@@ -173,7 +168,7 @@ public class AppsDisplayActivity extends AppCompatActivity implements  OnDialogD
         refreshTabs();
     }
 
-    public void refreshTabs(){
+    public void refreshTabs() {
         adapter.notifyDataSetChanged();
     }
 }

@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.appbar.matocham.applicationbar.OnDialogDissmissListener;
 import com.appbar.matocham.applicationbar.R;
-import com.appbar.matocham.applicationbar.applicationManager.WidgetsManager;
+import com.appbar.matocham.applicationbar.applicationManager.NewWidgetManager;
 
 /**
  * Created by Mateusz on 05.11.2016.
@@ -30,7 +30,7 @@ public class EditWidgetDialogFragment extends DialogFragment implements View.OnF
     Button ok, cancel;
     int widgetId;
     OnDialogDissmissListener listener;
-    WidgetsManager widgetsManager;
+    NewWidgetManager widgetsManager;
 
     public static EditWidgetDialogFragment getInstance(OnDialogDissmissListener listener, int widgetId) {
         EditWidgetDialogFragment instance = new EditWidgetDialogFragment();
@@ -42,7 +42,7 @@ public class EditWidgetDialogFragment extends DialogFragment implements View.OnF
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        widgetsManager = WidgetsManager.withContext(getContext());
+        widgetsManager = new NewWidgetManager(getContext());
     }
 
     @Nullable
@@ -78,7 +78,8 @@ public class EditWidgetDialogFragment extends DialogFragment implements View.OnF
                     errorMessage.setVisibility(View.VISIBLE);
                 } else {
                     String widgetLabel = widgetNameEditText.getText().toString().trim();
-                    widgetsManager.setWidgetLabel(widgetLabel, widgetId);
+                    widgetsManager.getWidget(widgetId).setLabel(widgetLabel);
+                    widgetsManager.store();
                     listener.dialogDissmissed();
                     dismiss();
                 }
