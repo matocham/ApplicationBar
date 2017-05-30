@@ -78,6 +78,7 @@ public class EditWidgetDialogFragment extends DialogFragment implements View.OnF
                     errorMessage.setVisibility(View.VISIBLE);
                 } else {
                     String widgetLabel = widgetNameEditText.getText().toString().trim();
+                    widgetsManager.refresh();
                     widgetsManager.getWidget(widgetId).setLabel(widgetLabel);
                     widgetsManager.store();
                     listener.dialogDissmissed();

@@ -8,10 +8,6 @@ import android.util.Log;
 
 import com.appbar.matocham.applicationbar.widget.AppBarWidgetService;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.type.CollectionType;
-import org.codehaus.jackson.map.type.TypeFactory;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -212,5 +208,9 @@ public class NewWidgetManager {
 
     public void store() {
         storeInPrefs();
+    }
+
+    public void refresh() {
+        loadFromPrefs();
     }
 }

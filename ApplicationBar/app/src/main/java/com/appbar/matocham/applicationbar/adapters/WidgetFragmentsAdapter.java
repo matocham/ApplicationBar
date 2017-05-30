@@ -18,7 +18,7 @@ import java.util.List;
  * Created by Mateusz on 16.01.2017.
  */
 
-public class WidgetFragmentsAdapter extends FragmentStatePagerAdapter{
+public class WidgetFragmentsAdapter extends FragmentStatePagerAdapter {
 
     public static final String TAG = "WidgetFragmentsAdapter";
     int[] widgets;
@@ -30,22 +30,28 @@ public class WidgetFragmentsAdapter extends FragmentStatePagerAdapter{
         widgetsManager = new NewWidgetManager(context);
         this.widgets = AppBarWidgetService.getAppWidgetIds(context);
         this.applications = Collections.emptyList();
-        Log.d(TAG,"Created new fragment");
+        Log.d(TAG, "Created new fragment");
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
         String title = widgetsManager.getWidget(widgets[position]).getLabel();
-        if(title.length()==0){
-            title = "Widget "+widgets[position];
+        if (title.length() == 0) {
+            title = "Widget " + widgets[position];
         }
         return title;
     }
 
     @Override
     public Fragment getItem(int position) {
-        WidgetViewFragment fragment = WidgetViewFragment.getInstance(applications,widgets[position]);
+        WidgetViewFragment fragment = WidgetViewFragment.getInstance(applications, widgets[position]);
         return fragment;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        widgetsManager.refresh();
+        super.notifyDataSetChanged();
     }
 
     @Override
