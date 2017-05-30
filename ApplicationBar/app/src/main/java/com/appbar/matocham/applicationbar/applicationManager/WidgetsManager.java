@@ -20,7 +20,7 @@ import java.util.Map;
  * Class to manage adding and deleting apps from widget. Most methods are static and require context in parameters
  * , only one listen to switch changes in list
  */
-
+@Deprecated
 public class WidgetsManager {
     public static final String TAG = "WidgetsManager";
     private static WidgetsManager instance;

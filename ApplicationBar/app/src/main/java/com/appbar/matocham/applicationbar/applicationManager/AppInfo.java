@@ -24,7 +24,6 @@ public class AppInfo implements  Comparable<AppInfo>{
     private Drawable icon;
 
     private AppInfo(){ // private constructor to prevent creation without using factory methods
-
     }
 
     public static ArrayList<AppInfo> getApplications(Context context, boolean getSysPackages) {
@@ -57,7 +56,7 @@ public class AppInfo implements  Comparable<AppInfo>{
     private static List<ActivityInfo> getInstalledApps(PackageManager packageManager){
         List<ResolveInfo> foundEntries = queryForApps(packageManager, null);
         if (foundEntries.isEmpty()) {
-            return new ArrayList<>();
+            return Collections.EMPTY_LIST;
         }
         List<ActivityInfo> foundApps = new ArrayList<>();
 
@@ -67,21 +66,8 @@ public class AppInfo implements  Comparable<AppInfo>{
         return foundApps;
     }
 
-    public static AppInfo getAppInfo(PackageManager packageManager, ActivityInfo appI) {
-        AppInfo newInfo = new AppInfo();
-        newInfo.setAppLabel(appI.loadLabel(packageManager).toString());
-        newInfo.setPackageName(appI.packageName);
-        newInfo.setIcon(appI.loadIcon(packageManager));
-
-        return newInfo;
-    }
-
-    public static AppInfo getAppInfo(PackageManager packageManager, String packageName) {
-        List<ResolveInfo> foundEntries = queryForApps(packageManager,packageName);
-        if (foundEntries.isEmpty()) {
-            return null;
-        }
-        return getAppInfo(packageManager, foundEntries.get(0).activityInfo);
+    private static boolean isSystemPackage(ActivityInfo appInfo) {
+        return ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) ? true : false;
     }
 
     /**
@@ -101,8 +87,33 @@ public class AppInfo implements  Comparable<AppInfo>{
         return foundEntries;
     }
 
-    private static boolean isSystemPackage(ActivityInfo appInfo) {
-        return ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) ? true : false;
+    public static AppInfo getAppInfo(PackageManager packageManager, String packageName) {
+        List<ResolveInfo> foundEntries = queryForApps(packageManager,packageName);
+        if (foundEntries.isEmpty()) {
+            return null;
+        }
+        return getAppInfo(packageManager, foundEntries.get(0).activityInfo);
+    }
+
+    public static AppInfo getAppInfo(PackageManager packageManager, ActivityInfo appI) {
+        AppInfo newInfo = new AppInfo();
+        newInfo.setAppLabel(appI.loadLabel(packageManager).toString());
+        newInfo.setPackageName(appI.packageName);
+        newInfo.setIcon(appI.loadIcon(packageManager));
+
+        return newInfo;
+    }
+
+    public static List<AppInfo> convert(List<AppElement> apps, Context context){
+        PackageManager packageManager = context.getPackageManager();
+        List<AppInfo> converted = new ArrayList<>();
+
+        for (AppElement app : apps) {
+            AppInfo aInfo = AppInfo.getAppInfo(packageManager, app.getName());
+            converted.add(aInfo);
+        }
+        Collections.sort(converted);
+        return converted;
     }
 
     public String getAppLabel() {

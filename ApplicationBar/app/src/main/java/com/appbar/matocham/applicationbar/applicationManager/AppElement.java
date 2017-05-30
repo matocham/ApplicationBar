@@ -1,5 +1,7 @@
 package com.appbar.matocham.applicationbar.applicationManager;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 /**
  * Created by Mateusz on 18.04.2017.
  */
@@ -15,10 +17,11 @@ public class AppElement {
         this.deleteTimestamp = deleteTimestamp;
     }
 
+    @Deprecated
     public AppElement(String parsed) {
         String[] parts = parsed.split(DELIMITER);
         name = parts[0];
-        if(parts.length>1){
+        if (parts.length > 1) {
             deleteTimestamp = Long.parseLong(parts[1]);
         }
     }
@@ -39,12 +42,22 @@ public class AppElement {
         this.deleteTimestamp = deleteTimestamp;
     }
 
-    public boolean isDeleted(){
-        return deleteTimestamp !=0;
+    @JsonIgnore
+    public boolean isDeleted() {
+        return deleteTimestamp != 0;
     }
 
+    @JsonIgnore
     public boolean isObsolote() {
-        return (System.currentTimeMillis()-getDeleteTimestamp()>MAX_PEROID);
+        return isDeleted() && (System.currentTimeMillis() - getDeleteTimestamp() > MAX_PEROID);
+    }
+
+    public void markAsRemoved() {
+        deleteTimestamp = System.currentTimeMillis();
+    }
+
+    public void markAsValid() {
+        deleteTimestamp = 0;
     }
 
     @Override

@@ -11,7 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * Created by Mateusz on 15.01.2017.
  */
-
+@Deprecated
 public class Widget {
 
     public static final String ID_FIELD_NAME = "ID";
