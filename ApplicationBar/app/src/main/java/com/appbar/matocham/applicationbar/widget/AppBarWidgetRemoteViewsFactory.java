@@ -72,7 +72,7 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
         if(position >= markedApps.size()){
             Log.e(TAG,"Dataset is obsolete. Renewing and sending refresh request to widgets!");
             position = markedApps.size()-1; // double last element
-            markedApps =  convert(widgetsManager.getValidApps(widgetId)); // refresh dataset
+            markedApps =  convert(widgetsManager.getValidApps(widgetId)); // refresh dataset as precaution only - it will be refreshed during dataset changed event
             AppBarWidgetService.updateAdapter(context); // send refresh evnet to widgets
         }
 
