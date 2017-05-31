@@ -43,15 +43,16 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
 
     @Override
     public void onCreate() {
-        Log.d(TAG,"Creating new widget - onCreate");
+        Log.d(TAG, "Creating new widget - widget "+widgetId);
         markedApps = convert(widgetsManager.getValidApps(widgetId));
-        Log.d(TAG,"Fetched "+markedApps.size()+" apps");
+        Log.d(TAG, "Fetched " + markedApps.size() + " apps");
     }
 
     @Override
     public void onDataSetChanged() {
-        Log.d(TAG,"Refreshing dataset");
-        onCreate();
+        Log.d(TAG, "Refreshing dataset - widget "+widgetId);
+        markedApps = convert(widgetsManager.getValidApps(widgetId));
+        Log.d(TAG, "Fetched " + markedApps.size() + " apps");
     }
 
     @Override
@@ -68,6 +69,13 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
 
     @Override
     public RemoteViews getViewAt(int position) {
+        if(position >= markedApps.size()){
+            Log.e(TAG,"Dataset is obsolete. Renewing and sending refresh request to widgets!");
+            position = markedApps.size()-1; // double last element
+            markedApps =  convert(widgetsManager.getValidApps(widgetId)); // refresh dataset
+            AppBarWidgetService.updateAdapter(context); // send refresh evnet to widgets
+        }
+
         RemoteViews item = new RemoteViews(context.getPackageName(), R.layout.widget_single_item_layout);
         AppInfo appInfo = markedApps.get(position);
         item.setImageViewBitmap(R.id.app_icon_widget, drawableToBitmap(appInfo.getIcon()));
@@ -123,13 +131,15 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
         return bitmap;
     }
 
-    private List<AppInfo> convert(List<AppElement> apps){
+    private List<AppInfo> convert(List<AppElement> apps) {
         PackageManager packageManager = context.getPackageManager();
         List<AppInfo> converted = new ArrayList<>();
 
         for (AppElement app : apps) {
             AppInfo aInfo = AppInfo.getAppInfo(packageManager, app.getName());
-            converted.add(aInfo);
+            if (aInfo != null) {
+                converted.add(aInfo);
+            }
         }
         Collections.sort(converted);
         return converted;
