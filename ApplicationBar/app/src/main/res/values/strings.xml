@@ -1,17 +1,17 @@
 <resources>
     <string name="app_name">Application Bar</string>
-    <string name="app_loading_dialog_title">Ładowanie aplikacji</string>
-    <string name="app_loading_dialog_msg">Proszę czekać</string>
-    <string name="widget_no_apps_message">Brak\naplikacji</string>
+    <string name="app_loading_dialog_title">Applications are loading</string>
+    <string name="app_loading_dialog_msg">Please wait</string>
+    <string name="widget_no_apps_message">No\napps</string>
     <string name="dialog_positive_button">OK</string>
-    <string name="no_widget_found">Brak widgetu</string>
+    <string name="no_widget_found">Create widget first</string>
     <string name="edit_widget_menu">Edit widget</string>
-    <string name="no_widget_name">Nazwa widgetu nie może być pusta</string>
-    <string name="widget_name">Nazwa</string>
-    <string name="ok_button_text">Ok</string>
-    <string name="cancel_button_text">Anuluj</string>
-    <string name="widget_edit_title">Edytuj</string>
-    <string name="enter_widget_name">Wpisz nazwę widgetu</string>
-    <string name="add_widget">Dodaj widget</string>
-    <string name="cancel">Anuluj</string>
+    <string name="no_widget_name">Name of the widget can`t be empty</string>
+    <string name="widget_name">Name</string>
+    <string name="ok_button_text">OK</string>
+    <string name="cancel_button_text">Cancel</string>
+    <string name="widget_edit_title">Edit</string>
+    <string name="enter_widget_name">Enter widget name</string>
+    <string name="add_widget">Add widget</string>
+    <string name="cancel">Cancel</string>
 </resources>
