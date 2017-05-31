@@ -56,7 +56,7 @@ public class AppBarWidgetProvider extends AppWidgetProvider {
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
 
-        RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.bar_widget_layout);
+        RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_bar_layout);
 
         rv.setRemoteAdapter(appWidgetId, R.id.listView2, intent);
         rv.setEmptyView(R.id.listView2, R.id.empty_view);

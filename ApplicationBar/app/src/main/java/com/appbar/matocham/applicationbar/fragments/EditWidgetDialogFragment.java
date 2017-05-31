@@ -48,7 +48,7 @@ public class EditWidgetDialogFragment extends DialogFragment implements View.OnF
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_fragment_widget_label, container);
+        View view = inflater.inflate(R.layout.fragment_edit_label_dialog, container);
 
         findWidgets(view);
         configureOkButton();

@@ -3,7 +3,7 @@
     android:minWidth="40dp"
     android:minHeight="110dp"
     android:updatePeriodMillis="0"
-    android:initialLayout="@layout/bar_widget_layout"
+    android:initialLayout="@layout/widget_bar_layout"
     android:resizeMode="vertical"
     android:configure="com.appbar.matocham.applicationbar.WidgetConfigurationActivity"
     android:widgetCategory="home_screen">

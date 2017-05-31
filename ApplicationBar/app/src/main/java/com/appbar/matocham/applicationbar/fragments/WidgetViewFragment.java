@@ -58,10 +58,10 @@ public class WidgetViewFragment extends Fragment implements AdapterView.OnItemCl
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.single_widget_layout, container, false);
+                R.layout.app_list_fragment_layout, container, false);
 
         listView = (ListView) rootView.findViewById(R.id.listView1);
-        adapter = new ApplicationListAdapter(context, R.layout.single_item_layout, availableApplications, this);
+        adapter = new ApplicationListAdapter(context, R.layout.app_item_layout_element, availableApplications, this);
         adapter.setWidgetId(widgetId);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);

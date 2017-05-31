@@ -76,7 +76,7 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
             AppBarWidgetService.updateAdapter(context); // send refresh evnet to widgets
         }
 
-        RemoteViews item = new RemoteViews(context.getPackageName(), R.layout.widget_single_item_layout);
+        RemoteViews item = new RemoteViews(context.getPackageName(), R.layout.widget_item);
         AppInfo appInfo = markedApps.get(position);
         item.setImageViewBitmap(R.id.app_icon_widget, drawableToBitmap(appInfo.getIcon()));
 
