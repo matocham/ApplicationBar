@@ -24,7 +24,7 @@ public class AppInstallReceiver extends BroadcastReceiver {
         NewWidgetManager manager = new NewWidgetManager(context);
         for (int widgetId : widgetIds) {
             manager.renewIfValid(packageName, widgetId);
-            AppBarWidgetService.updateAdapter(context);
         }
+        AppBarWidgetService.updateAdapter(context);
     }
 }

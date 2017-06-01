@@ -35,6 +35,7 @@ public class WidgetFragmentsAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
+        widgetsManager.refresh();
         String title = widgetsManager.getWidget(widgets[position]).getLabel();
         if (title.length() == 0) {
             title = "Widget " + widgets[position];

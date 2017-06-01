@@ -24,8 +24,8 @@ public class AppUninstallReceiver extends BroadcastReceiver {
         for(int widgetId : widgetIds){
             if(manager.contains(packageName,widgetId)){
                 manager.markAsRemoved(packageName,widgetId); // eliminates exception throw when creating apps list
-                AppBarWidgetService.updateAdapter(context);
             }
         }
+        AppBarWidgetService.updateAdapter(context);
     }
 }

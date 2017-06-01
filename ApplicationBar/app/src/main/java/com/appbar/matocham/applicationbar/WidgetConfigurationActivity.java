@@ -85,8 +85,9 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
         String label = labelEditText.getText().toString().trim();
         if (label.length() > 0) {
             NewWidgetManager widgetsManager = new NewWidgetManager(this);
+            widgetsManager.lockAndRefresh();
             widgetsManager.getWidget(widgetId).setLabel(label);
-            widgetsManager.store();
+            widgetsManager.storeAndReleaseLock();
         }
     }
 }

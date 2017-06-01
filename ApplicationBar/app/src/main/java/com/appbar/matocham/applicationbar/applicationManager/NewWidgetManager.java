@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by matocham on 30.05.2017.
@@ -20,6 +22,7 @@ import java.util.List;
 public class NewWidgetManager {
     private static final String STORAGE_KEY = "matocham.applicationbar.WIDGET_APPS_KEY";
     private static final String TAG = "NewWidgetManager";
+    private static final Lock LOCK = new ReentrantLock();
 
     private JsonConverter converter;
     private List<NewWidget> widgets;
@@ -38,9 +41,8 @@ public class NewWidgetManager {
         try {
             int[] widgetsIds = AppBarWidgetService.getAppWidgetIds(context);
             String persistedWidgets = storage.getString(STORAGE_KEY, "[]");
-            Log.d(TAG, "Loaded string: " + persistedWidgets);
             widgets = converter.readValue(persistedWidgets);
-            Log.d(TAG,"After conversion: "+widgets);
+            Log.d(TAG, "Loaded widgets: " + widgets);
             createMissingWidgets(widgetsIds);
             removeObsoleteWidgets(widgetsIds);
         } catch (IOException e) {
@@ -89,7 +91,7 @@ public class NewWidgetManager {
     private void storeInPrefs() {
         try {
             String widgetsStoreString = converter.writeValueAsString(widgets);
-            Log.d(TAG, "String to save: " + widgetsStoreString);
+            Log.d(TAG, "Saving dataset");
             storage.edit().putString(STORAGE_KEY, widgetsStoreString).apply();
         } catch (IOException e) {
             e.printStackTrace();
@@ -97,12 +99,12 @@ public class NewWidgetManager {
     }
 
     public void addApp(String packageName, int widgetId) {
-        loadFromPrefs();
+        lockAndRefresh();
         NewWidget widget = getWidgetById(widgetId);
         if (widget != null) {
             widget.addApp(packageName);
         }
-        storeInPrefs();
+        storeAndReleaseLock();
     }
 
     @Nullable
@@ -120,30 +122,30 @@ public class NewWidgetManager {
     }
 
     public void removeApp(String packageName, int widgetId) {
-        loadFromPrefs();
+        lockAndRefresh();
         NewWidget widget = getWidgetById(widgetId);
         if (widget != null) {
             widget.removeApp(packageName);
         }
-        storeInPrefs();
+        storeAndReleaseLock();
     }
 
     public void markAsRemoved(String packageName, int widgetId) {
-        loadFromPrefs();
+        lockAndRefresh();
         NewWidget widget = getWidgetById(widgetId);
         if (widget != null) {
             widget.markAsRemoved(packageName);
         }
-        storeInPrefs();
+        storeAndReleaseLock();
     }
 
     public void markAsValid(String packageName, int widgetId) {
-        loadFromPrefs();
+        lockAndRefresh();
         NewWidget widget = getWidgetById(widgetId);
         if (widget != null) {
             widget.markAsValid(packageName);
         }
-        storeInPrefs();
+        storeAndReleaseLock();
     }
 
     public boolean isValid(String packageName, int widgetId) {
@@ -156,12 +158,12 @@ public class NewWidgetManager {
     }
 
     public void renewIfValid(String packageName, int widgetId) {
-        loadFromPrefs();
+        lockAndRefresh();
         NewWidget widget = getWidgetById(widgetId);
         if (widget != null) {
             widget.renewIfValid(packageName);
         }
-        storeInPrefs();
+        storeAndReleaseLock();
     }
 
     public List<AppElement> getValidApps(int widgetId) {
@@ -192,14 +194,14 @@ public class NewWidgetManager {
     }
 
     public void remove(int widgetId) {
-        loadFromPrefs();
+        lockAndRefresh();
         Log.d(TAG, "Trying to remove widget " + widgetId);
         NewWidget widget = getWidget(widgetId);
         if (widget != null) {
             Log.d(TAG, "Widget " + widgetId + " removed");
             widgets.remove(widget);
         }
-        storeInPrefs();
+        storeAndReleaseLock();
     }
 
     public NewWidget getWidget(int widgetId) {
@@ -212,5 +214,25 @@ public class NewWidgetManager {
 
     public void refresh() {
         loadFromPrefs();
+    }
+
+    public void getLock() {
+        LOCK.lock();
+        Log.d(TAG,"Lock acquired in thread "+Thread.currentThread().getName());
+    }
+
+    public void releaseLock() {
+        LOCK.unlock();
+        Log.d(TAG,"Lock released in thread "+Thread.currentThread().getName());
+    }
+
+    public void lockAndRefresh() {
+        getLock();
+        refresh();
+    }
+
+    public void storeAndReleaseLock() {
+        store();
+        releaseLock();
     }
 }

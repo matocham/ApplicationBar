@@ -65,6 +65,7 @@ public class EditWidgetDialogFragment extends DialogFragment implements View.OnF
     }
 
     private void configureEditText() {
+        widgetsManager.refresh();
         widgetNameEditText.setText(widgetsManager.getWidget(widgetId).getLabel());
         widgetNameEditText.setOnFocusChangeListener(this);
         widgetNameEditText.getBackground().setColorFilter(getContext().getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
@@ -78,9 +79,9 @@ public class EditWidgetDialogFragment extends DialogFragment implements View.OnF
                     errorMessage.setVisibility(View.VISIBLE);
                 } else {
                     String widgetLabel = widgetNameEditText.getText().toString().trim();
-                    widgetsManager.refresh();
+                    widgetsManager.lockAndRefresh();
                     widgetsManager.getWidget(widgetId).setLabel(widgetLabel);
-                    widgetsManager.store();
+                    widgetsManager.storeAndReleaseLock();
                     listener.dialogDissmissed();
                     dismiss();
                 }
