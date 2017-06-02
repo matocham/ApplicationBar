@@ -1,4 +1,4 @@
-package com.appbar.matocham.applicationbar;
+package com.appbar.matocham.applicationbar.interfaces;
 
 /**
  * Created by Mateusz on 19.01.2017.

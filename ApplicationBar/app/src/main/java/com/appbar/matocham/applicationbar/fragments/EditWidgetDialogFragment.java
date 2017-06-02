@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.appbar.matocham.applicationbar.OnDialogDissmissListener;
+import com.appbar.matocham.applicationbar.interfaces.OnDialogDissmissListener;
 import com.appbar.matocham.applicationbar.R;
 import com.appbar.matocham.applicationbar.applicationManager.NewWidgetManager;
 

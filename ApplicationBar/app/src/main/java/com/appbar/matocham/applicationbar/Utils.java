@@ -1,9 +1,11 @@
 package com.appbar.matocham.applicationbar;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -48,10 +50,24 @@ public class Utils {
         alertDialog.show();
     }
 
-    private static AlertDialog getSimpleDialog(Context context){
+    private static AlertDialog getSimpleDialog(Context context) {
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         alertDialog.setCancelable(false);
         alertDialog.setCanceledOnTouchOutside(false);
-        return  alertDialog;
+        return alertDialog;
     }
+
+    public static int getSoftButtonsBarSizePort(Activity activity) {
+        DisplayMetrics metrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int usableHeight = metrics.heightPixels;
+        activity.getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+        int realHeight = metrics.heightPixels;
+        if (realHeight > usableHeight) {
+            return realHeight - usableHeight;
+        } else {
+            return 0;
+        }
+    }
+
 }

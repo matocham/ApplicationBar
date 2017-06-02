@@ -23,6 +23,7 @@ import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
 import com.appbar.matocham.applicationbar.asyncTasks.LoadAppsAsyncTask;
 import com.appbar.matocham.applicationbar.fragments.EditWidgetDialogFragment;
 import com.appbar.matocham.applicationbar.fragments.WidgetViewFragment;
+import com.appbar.matocham.applicationbar.interfaces.OnDialogDissmissListener;
 import com.appbar.matocham.applicationbar.widget.AppBarWidgetService;
 
 import java.util.List;

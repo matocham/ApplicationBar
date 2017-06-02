@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/activity_apps_display"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/windowBackground"
-    android:orientation="vertical">
-
-    <ListView
-        android:id="@+id/listView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent">
-    </ListView>
-
-</LinearLayout>
+<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/activity_apps_display"
+android:name="pl.edu.pb.wi.projekt.barcodereader.fragments.SearchResultFragment"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+app:layoutManager="LinearLayoutManager"
+tools:context="com.appbar.matocham.applicationbar.fragments.WidgetViewFragment"
+tools:listitem="@layout/app_item_layout_element"
+android:background="@color/windowBackground"/>

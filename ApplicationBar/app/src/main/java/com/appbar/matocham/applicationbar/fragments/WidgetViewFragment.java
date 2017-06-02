@@ -3,18 +3,18 @@ package com.appbar.matocham.applicationbar.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Switch;
 
 import com.appbar.matocham.applicationbar.R;
 import com.appbar.matocham.applicationbar.adapters.ApplicationListAdapter;
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
 import com.appbar.matocham.applicationbar.applicationManager.NewWidgetManager;
+import com.appbar.matocham.applicationbar.interfaces.OnRecyclerItemClickListener;
+import com.appbar.matocham.applicationbar.interfaces.SwitchChangeListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +23,14 @@ import java.util.List;
  * Created by Mateusz on 16.01.2017.
  */
 
-public class WidgetViewFragment extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener {
+public class WidgetViewFragment extends Fragment implements OnRecyclerItemClickListener, SwitchChangeListener {
     public static final String TAG = "WidgetViewFragment";
     List<AppInfo> availableApplications;
     int widgetId;
     ApplicationListAdapter adapter;
-    ListView listView;
     Context context;
     NewWidgetManager widgetsManager;
+    RecyclerView recyclerView;
 
     public static WidgetViewFragment getInstance(List<AppInfo> applications, int widgetId) {
         WidgetViewFragment instance = new WidgetViewFragment();
@@ -57,38 +57,30 @@ public class WidgetViewFragment extends Fragment implements AdapterView.OnItemCl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(
+        this.recyclerView = (RecyclerView) inflater.inflate(
                 R.layout.app_list_fragment_layout, container, false);
 
-        listView = (ListView) rootView.findViewById(R.id.listView1);
-        adapter = new ApplicationListAdapter(context, R.layout.app_item_layout_element, availableApplications, this);
+        adapter = new ApplicationListAdapter(context, availableApplications, this, this);
         adapter.setWidgetId(widgetId);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(this);
-
-        return rootView;
-    }
-
-    @Override
-    public void onClick(View v) {
-        Switch swx = (Switch) v;
-        int position = listView.getPositionForView((View) swx.getParent());
-        boolean state = swx.isChecked();
-        AppInfo app = adapter.getItem(position);
-        if (state) {
-            widgetsManager.addApp(app.toString(), widgetId);
-        } else {
-            widgetsManager.removeApp(app.toString(), widgetId);
-        }
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        AppInfo info = adapter.getItem(position);
-        startActivity(context.getPackageManager().getLaunchIntentForPackage(info.getPackageName()));
+        recyclerView.setAdapter(adapter);
+        return recyclerView;
     }
 
     public int getWidgetId() {
         return widgetId;
+    }
+
+    @Override
+    public void switchChanged(boolean state, AppInfo appInfo) {
+        if (state) {
+            widgetsManager.addApp(appInfo.toString(), widgetId);
+        } else {
+            widgetsManager.removeApp(appInfo.toString(), widgetId);
+        }
+    }
+
+    @Override
+    public void itemClicked(int position, AppInfo appInfo) {
+        startActivity(context.getPackageManager().getLaunchIntentForPackage(appInfo.getPackageName()));
     }
 }
