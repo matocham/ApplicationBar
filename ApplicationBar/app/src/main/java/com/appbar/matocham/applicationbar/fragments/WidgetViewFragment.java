@@ -13,8 +13,7 @@ import com.appbar.matocham.applicationbar.R;
 import com.appbar.matocham.applicationbar.adapters.ApplicationListAdapter;
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
 import com.appbar.matocham.applicationbar.applicationManager.NewWidgetManager;
-import com.appbar.matocham.applicationbar.interfaces.OnRecyclerItemClickListener;
-import com.appbar.matocham.applicationbar.interfaces.SwitchChangeListener;
+import com.appbar.matocham.applicationbar.interfaces.AdapterItemInteractionListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ import java.util.List;
  * Created by Mateusz on 16.01.2017.
  */
 
-public class WidgetViewFragment extends Fragment implements OnRecyclerItemClickListener, SwitchChangeListener {
+public class WidgetViewFragment extends Fragment implements AdapterItemInteractionListener {
     public static final String TAG = "WidgetViewFragment";
     List<AppInfo> availableApplications;
     int widgetId;
@@ -36,12 +35,12 @@ public class WidgetViewFragment extends Fragment implements OnRecyclerItemClickL
         WidgetViewFragment instance = new WidgetViewFragment();
         instance.availableApplications = applications;
         instance.widgetId = widgetId;
-        Log.d(TAG,"creating fragment by instance");
+        Log.d(TAG, "creating fragment by instance");
         return instance;
     }
 
     public WidgetViewFragment() {
-        Log.d(TAG,"Calling constructor");
+        Log.d(TAG, "Calling constructor");
     }
 
     @Override
@@ -49,7 +48,7 @@ public class WidgetViewFragment extends Fragment implements OnRecyclerItemClickL
         super.onAttach(context);
         this.context = context;
         widgetsManager = new NewWidgetManager(context);
-        if(availableApplications == null){
+        if (availableApplications == null) {
             availableApplications = new ArrayList<>();
         }
     }
@@ -60,7 +59,7 @@ public class WidgetViewFragment extends Fragment implements OnRecyclerItemClickL
         this.recyclerView = (RecyclerView) inflater.inflate(
                 R.layout.app_list_fragment_layout, container, false);
 
-        adapter = new ApplicationListAdapter(context, availableApplications, this, this);
+        adapter = new ApplicationListAdapter(context, availableApplications, this);
         adapter.setWidgetId(widgetId);
         recyclerView.setAdapter(adapter);
         return recyclerView;
