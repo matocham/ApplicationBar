@@ -4,11 +4,13 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -79,7 +81,6 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
         RemoteViews item = new RemoteViews(context.getPackageName(), R.layout.widget_item);
         AppInfo appInfo = markedApps.get(position);
         item.setImageViewBitmap(R.id.app_icon_widget, drawableToBitmap(appInfo.getIcon()));
-
         Bundle extras = new Bundle();
         extras.putString(AppBarWidgetProvider.APP_ID, appInfo.getPackageName());
         extras.putInt(AppBarWidgetProvider.WIDGET_ID, widgetId);
@@ -144,4 +145,5 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
         Collections.sort(converted);
         return converted;
     }
+
 }

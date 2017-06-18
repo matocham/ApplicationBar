@@ -7,9 +7,10 @@
     <ImageView
         android:id="@+id/app_icon"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
         android:padding="3dp"
         android:layout_weight="1"
+        android:scaleType="centerInside"
         android:contentDescription="Application icon"/>
     <TextView
         android:layout_width="0dp"
