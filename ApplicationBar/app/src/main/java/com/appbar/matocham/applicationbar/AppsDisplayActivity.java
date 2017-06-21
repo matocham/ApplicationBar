@@ -30,14 +30,15 @@ import java.util.List;
 
 public class AppsDisplayActivity extends AppCompatActivity implements OnDialogDissmissListener {
     private static final String TAG = "AppsDisplayActivity";
-    ViewPager widgetViews;
+    private ViewPager widgetViews;
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    MenuItem item;
+    private MenuItem item;
 
-    WidgetFragmentsAdapter adapter;
-    TextView noWidgetsView;
-    int[] widgetIds;
+    private WidgetFragmentsAdapter adapter;
+    private TextView noWidgetsView;
+    private int[] widgetIds;
+    private LoadAppsAsyncTask loadAppsAsyncTask;
 
     Handler handler = new Handler() {
         @Override
@@ -58,7 +59,8 @@ public class AppsDisplayActivity extends AppCompatActivity implements OnDialogDi
     private void loadWidgets() {
         widgetIds = AppBarWidgetService.getAppWidgetIds(this);
         if (widgetIds.length > 0) {
-            new LoadAppsAsyncTask(this, handler, true).execute();
+            loadAppsAsyncTask = new LoadAppsAsyncTask(this, handler, true);
+            loadAppsAsyncTask.execute();
             AppBarWidgetService.updateWidget(this);
         }
     }
@@ -171,5 +173,13 @@ public class AppsDisplayActivity extends AppCompatActivity implements OnDialogDi
 
     public void refreshTabs() {
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(loadAppsAsyncTask !=null && !loadAppsAsyncTask.isCancelled()){
+            loadAppsAsyncTask.cancel(true);
+        }
+        super.onDestroy();
     }
 }

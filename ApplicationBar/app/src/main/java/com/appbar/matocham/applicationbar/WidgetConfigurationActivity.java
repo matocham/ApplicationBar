@@ -21,7 +21,9 @@ import java.util.List;
 
 public class WidgetConfigurationActivity extends AppCompatActivity {
 
-    int widgetId;
+    private int widgetId;
+    private LoadAppsAsyncTask loadAppsAsyncTask;
+
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -46,7 +48,8 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
                     AppWidgetManager.INVALID_APPWIDGET_ID);
         }
 
-        new LoadAppsAsyncTask(this, handler, true).execute();
+        loadAppsAsyncTask = new LoadAppsAsyncTask(this, handler, true);
+        loadAppsAsyncTask.execute();
         setNegativeResult();
     }
 
@@ -89,5 +92,13 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
             widgetsManager.getWidget(widgetId).setLabel(label);
             widgetsManager.storeAndReleaseLock();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (loadAppsAsyncTask != null && !loadAppsAsyncTask.isCancelled()) {
+            loadAppsAsyncTask.cancel(true);
+        }
+        super.onDestroy();
     }
 }
