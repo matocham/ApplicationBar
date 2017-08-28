@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.appbar.matocham.applicationbar.R;
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
-import com.appbar.matocham.applicationbar.applicationManager.NewWidgetManager;
+import com.appbar.matocham.applicationbar.applicationManager.WidgetManager;
 import com.appbar.matocham.applicationbar.interfaces.AdapterItemInteractionListener;
 
 import java.util.List;
@@ -22,12 +22,12 @@ import java.util.List;
 
 public class ApplicationListAdapter extends RecyclerView.Adapter<ApplicationListAdapter.AppViewHolder> {
     private int widgetId;
-    AdapterItemInteractionListener itemListener;
-    NewWidgetManager widgetsManager;
-    List<AppInfo> apps;
+    private AdapterItemInteractionListener itemListener;
+    private WidgetManager widgetsManager;
+    private List<AppInfo> apps;
 
     public ApplicationListAdapter(Context context, List<AppInfo> apps, AdapterItemInteractionListener itemListener) {
-        widgetsManager = new NewWidgetManager(context);
+        widgetsManager = new WidgetManager(context);
         this.itemListener = itemListener;
         this.apps = apps;
     }

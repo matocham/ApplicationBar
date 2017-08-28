@@ -8,5 +8,6 @@ import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
 
 public interface AdapterItemInteractionListener {
     void itemClicked(int position, AppInfo appInfo);
+
     void switchChanged(boolean state, AppInfo appInfo);
 }

@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.RemoteViews;
 
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
-import com.appbar.matocham.applicationbar.applicationManager.NewWidgetManager;
+import com.appbar.matocham.applicationbar.applicationManager.WidgetManager;
 import com.appbar.matocham.applicationbar.asyncTasks.LoadAppsAsyncTask;
 import com.appbar.matocham.applicationbar.fragments.WidgetViewFragment;
 import com.appbar.matocham.applicationbar.widget.AppBarWidgetProvider;
@@ -87,7 +87,7 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
         EditText labelEditText = (EditText) findViewById(R.id.widget_label);
         String label = labelEditText.getText().toString().trim();
         if (label.length() > 0) {
-            NewWidgetManager widgetsManager = new NewWidgetManager(this);
+            WidgetManager widgetsManager = new WidgetManager(this);
             widgetsManager.lockAndRefresh();
             widgetsManager.getWidget(widgetId).setLabel(label);
             widgetsManager.storeAndReleaseLock();

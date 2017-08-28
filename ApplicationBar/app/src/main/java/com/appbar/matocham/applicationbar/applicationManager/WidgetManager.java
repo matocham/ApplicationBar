@@ -19,17 +19,17 @@ import java.util.concurrent.locks.ReentrantLock;
  * Created by matocham on 30.05.2017.
  */
 
-public class NewWidgetManager {
+public class WidgetManager {
     private static final String STORAGE_KEY = "matocham.applicationbar.WIDGET_APPS_KEY";
-    private static final String TAG = "NewWidgetManager";
+    private static final String TAG = "WidgetManager";
     private static final Lock LOCK = new ReentrantLock();
 
     private JsonConverter converter;
-    private List<NewWidget> widgets;
+    private List<Widget> widgets;
     private Context context;
     private SharedPreferences storage;
 
-    public NewWidgetManager(Context context) {
+    public WidgetManager(Context context) {
         converter = new JsonConverter();
         widgets = new ArrayList<>();
         this.context = context;
@@ -53,7 +53,7 @@ public class NewWidgetManager {
     private void createMissingWidgets(int[] widgetsIds) {
         for (int widgetId : widgetsIds) {
             boolean found = false;
-            for (NewWidget widget : widgets) {
+            for (Widget widget : widgets) {
                 if (widget.getId() == widgetId) {
                     found = true;
                     break;
@@ -61,15 +61,15 @@ public class NewWidgetManager {
             }
             if (!found) {
                 Log.d(TAG, "Widget with id " + widgetId + " is not stored. Adding as new!");
-                widgets.add(new NewWidget(widgetId));
+                widgets.add(new Widget(widgetId));
                 storeInPrefs();
             }
         }
     }
 
     private void removeObsoleteWidgets(int[] widgetsIds) {
-        List<NewWidget> toRemove = new ArrayList<>();
-        for (NewWidget widget : widgets) {
+        List<Widget> toRemove = new ArrayList<>();
+        for (Widget widget : widgets) {
             boolean found = false;
             for (int widgetId : widgetsIds) {
                 if (widget.getId() == widgetId) {
@@ -100,7 +100,7 @@ public class NewWidgetManager {
 
     public void addApp(String packageName, int widgetId) {
         lockAndRefresh();
-        NewWidget widget = getWidgetById(widgetId);
+        Widget widget = getWidgetById(widgetId);
         if (widget != null) {
             widget.addApp(packageName);
         }
@@ -108,9 +108,9 @@ public class NewWidgetManager {
     }
 
     @Nullable
-    private NewWidget getWidgetById(int widgetId) {
-        NewWidget widget = null;
-        for (NewWidget wid : widgets) {
+    private Widget getWidgetById(int widgetId) {
+        Widget widget = null;
+        for (Widget wid : widgets) {
             if (wid.getId() == widgetId) {
                 widget = wid;
             }
@@ -123,7 +123,7 @@ public class NewWidgetManager {
 
     public void removeApp(String packageName, int widgetId) {
         lockAndRefresh();
-        NewWidget widget = getWidgetById(widgetId);
+        Widget widget = getWidgetById(widgetId);
         if (widget != null) {
             widget.removeApp(packageName);
         }
@@ -132,7 +132,7 @@ public class NewWidgetManager {
 
     public void markAsRemoved(String packageName, int widgetId) {
         lockAndRefresh();
-        NewWidget widget = getWidgetById(widgetId);
+        Widget widget = getWidgetById(widgetId);
         if (widget != null) {
             widget.markAsRemoved(packageName);
         }
@@ -141,7 +141,7 @@ public class NewWidgetManager {
 
     public void markAsValid(String packageName, int widgetId) {
         lockAndRefresh();
-        NewWidget widget = getWidgetById(widgetId);
+        Widget widget = getWidgetById(widgetId);
         if (widget != null) {
             widget.markAsValid(packageName);
         }
@@ -150,7 +150,7 @@ public class NewWidgetManager {
 
     public boolean isValid(String packageName, int widgetId) {
         loadFromPrefs();
-        NewWidget widget = getWidgetById(widgetId);
+        Widget widget = getWidgetById(widgetId);
         if (widget != null) {
             return widget.isValid(packageName);
         }
@@ -159,7 +159,7 @@ public class NewWidgetManager {
 
     public void renewIfValid(String packageName, int widgetId) {
         lockAndRefresh();
-        NewWidget widget = getWidgetById(widgetId);
+        Widget widget = getWidgetById(widgetId);
         if (widget != null) {
             widget.renewIfValid(packageName);
         }
@@ -168,7 +168,7 @@ public class NewWidgetManager {
 
     public List<AppElement> getValidApps(int widgetId) {
         loadFromPrefs();
-        NewWidget widget = getWidgetById(widgetId);
+        Widget widget = getWidgetById(widgetId);
         if (widget != null) {
             return widget.getValidApps();
         }
@@ -177,7 +177,7 @@ public class NewWidgetManager {
 
     public boolean contains(String packageName, int widgetId) {
         loadFromPrefs();
-        NewWidget widget = getWidgetById(widgetId);
+        Widget widget = getWidgetById(widgetId);
         if (widget != null) {
             return widget.contains(packageName);
         }
@@ -185,7 +185,7 @@ public class NewWidgetManager {
     }
 
     public boolean contains(int widgetId) {
-        for (NewWidget widget : widgets) {
+        for (Widget widget : widgets) {
             if (widget.getId() == widgetId) {
                 return true;
             }
@@ -196,7 +196,7 @@ public class NewWidgetManager {
     public void remove(int widgetId) {
         lockAndRefresh();
         Log.d(TAG, "Trying to remove widget " + widgetId);
-        NewWidget widget = getWidget(widgetId);
+        Widget widget = getWidget(widgetId);
         if (widget != null) {
             Log.d(TAG, "Widget " + widgetId + " removed");
             widgets.remove(widget);
@@ -204,7 +204,7 @@ public class NewWidgetManager {
         storeAndReleaseLock();
     }
 
-    public NewWidget getWidget(int widgetId) {
+    public Widget getWidget(int widgetId) {
         return getWidgetById(widgetId);
     }
 
@@ -218,12 +218,12 @@ public class NewWidgetManager {
 
     public void getLock() {
         LOCK.lock();
-        Log.d(TAG,"Lock acquired in thread "+Thread.currentThread().getName());
+        Log.d(TAG, "Lock acquired in thread " + Thread.currentThread().getName());
     }
 
     public void releaseLock() {
         LOCK.unlock();
-        Log.d(TAG,"Lock released in thread "+Thread.currentThread().getName());
+        Log.d(TAG, "Lock released in thread " + Thread.currentThread().getName());
     }
 
     public void lockAndRefresh() {

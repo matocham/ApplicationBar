@@ -11,17 +11,17 @@ import java.util.List;
  * Created by matocham on 30.05.2017.
  */
 
-public class NewWidget {
-    public static final String TAG = "Widget";
+public class Widget {
+    private static final String TAG = "Widget";
     private List<AppElement> applications;
     private String label;
     private int id;
 
-    public NewWidget() {
-    // constructor used by Jackson
+    public Widget() {
+        // constructor used by Jackson
     }
 
-    public NewWidget(int id) {
+    public Widget(int id) {
         this.id = id;
         label = id + "";
         applications = new ArrayList<>();
@@ -155,6 +155,6 @@ public class NewWidget {
 
     @Override
     public String toString() {
-        return applications.toString()+" id:"+id+" label:"+label;
+        return applications.toString() + " id:" + id + " label:" + label;
     }
 }

@@ -15,9 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.appbar.matocham.applicationbar.interfaces.OnDialogDissmissListener;
 import com.appbar.matocham.applicationbar.R;
-import com.appbar.matocham.applicationbar.applicationManager.NewWidgetManager;
+import com.appbar.matocham.applicationbar.applicationManager.WidgetManager;
+import com.appbar.matocham.applicationbar.interfaces.OnDialogDissmissListener;
 
 /**
  * Created by Mateusz on 05.11.2016.
@@ -26,11 +26,11 @@ import com.appbar.matocham.applicationbar.applicationManager.NewWidgetManager;
 public class EditWidgetDialogFragment extends DialogFragment implements View.OnFocusChangeListener {
 
     private EditText widgetNameEditText;
-    TextView errorMessage;
-    Button ok, cancel;
-    int widgetId;
-    OnDialogDissmissListener listener;
-    NewWidgetManager widgetsManager;
+    private TextView errorMessage;
+    private Button ok, cancel;
+    private int widgetId;
+    private OnDialogDissmissListener listener;
+    private WidgetManager widgetsManager;
 
     public static EditWidgetDialogFragment getInstance(OnDialogDissmissListener listener, int widgetId) {
         EditWidgetDialogFragment instance = new EditWidgetDialogFragment();
@@ -42,7 +42,7 @@ public class EditWidgetDialogFragment extends DialogFragment implements View.OnF
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        widgetsManager = new NewWidgetManager(getContext());
+        widgetsManager = new WidgetManager(getContext());
     }
 
     @Nullable

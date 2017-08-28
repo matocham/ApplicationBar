@@ -11,19 +11,19 @@ import java.util.ArrayList;
  */
 
 public class JsonConverter {
-    ObjectMapper mapper;
-    CollectionType widgetsListCollectionType;
+    private ObjectMapper mapper;
+    private CollectionType widgetsListCollectionType;
 
     public JsonConverter() {
         mapper = new ObjectMapper();
-        widgetsListCollectionType = mapper.getTypeFactory().constructCollectionType(ArrayList.class, NewWidget.class);
+        widgetsListCollectionType = mapper.getTypeFactory().constructCollectionType(ArrayList.class, Widget.class);
     }
 
     public String writeValueAsString(Object objectToMap) throws IOException {
         return mapper.writeValueAsString(objectToMap);
     }
 
-    public ArrayList<NewWidget> readValue(String jsonValue) throws IOException {
+    public ArrayList<Widget> readValue(String jsonValue) throws IOException {
         return mapper.readValue(jsonValue, widgetsListCollectionType);
     }
 }

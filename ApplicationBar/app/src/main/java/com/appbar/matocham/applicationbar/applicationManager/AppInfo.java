@@ -17,19 +17,19 @@ import java.util.List;
  * Created by Mateusz on 10.01.2017.
  */
 
-public class AppInfo implements  Comparable<AppInfo>{
+public class AppInfo implements Comparable<AppInfo> {
 
     private String appLabel;
     private String packageName;
     private Drawable icon;
 
-    private AppInfo(){ // private constructor to prevent creation without using factory methods
+    private AppInfo() { // private constructor to prevent creation without using factory methods
     }
 
     public static ArrayList<AppInfo> getApplications(Context context, boolean getSysPackages) {
         ArrayList<AppInfo> apps = getInstalledApps(context, getSysPackages); /* false = no system packages */
         final int max = apps.size();
-        for (int i=0; i<max; i++) {
+        for (int i = 0; i < max; i++) {
             apps.get(i).prettyPrint();
         }
         return apps;
@@ -39,13 +39,13 @@ public class AppInfo implements  Comparable<AppInfo>{
         ArrayList<AppInfo> res = new ArrayList<>();
         PackageManager packageManager = context.getPackageManager();
         List<ActivityInfo> appsInfo = getInstalledApps(packageManager);
-        for(int i=0;i<appsInfo.size();i++) {
+        for (int i = 0; i < appsInfo.size(); i++) {
             ActivityInfo appI = appsInfo.get(i);
             if ((!getSysPackages) && isSystemPackage(appI)) {
-                continue ;
+                continue;
             }
             AppInfo newInfo = getAppInfo(packageManager, appI);
-            if(newInfo!=null){
+            if (newInfo != null) {
                 res.add(newInfo);
             }
         }
@@ -53,14 +53,14 @@ public class AppInfo implements  Comparable<AppInfo>{
         return res;
     }
 
-    private static List<ActivityInfo> getInstalledApps(PackageManager packageManager){
+    private static List<ActivityInfo> getInstalledApps(PackageManager packageManager) {
         List<ResolveInfo> foundEntries = queryForApps(packageManager, null);
         if (foundEntries.isEmpty()) {
             return Collections.EMPTY_LIST;
         }
         List<ActivityInfo> foundApps = new ArrayList<>();
 
-        for(ResolveInfo inf : foundEntries){
+        for (ResolveInfo inf : foundEntries) {
             foundApps.add(inf.activityInfo);
         }
         return foundApps;
@@ -73,9 +73,10 @@ public class AppInfo implements  Comparable<AppInfo>{
     /**
      * creates intent with ACTION_MAIN and category CATEGORY_LAUNCHER to get all Activities
      * witch specified package path that can be started using intent
+     *
      * @return
      */
-    private static List<ResolveInfo> queryForApps(PackageManager packageManager, String packageName){
+    private static List<ResolveInfo> queryForApps(PackageManager packageManager, String packageName) {
         List<ResolveInfo> foundEntries;
         Intent intentToResolve = new Intent(Intent.ACTION_MAIN);
         intentToResolve.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -88,7 +89,7 @@ public class AppInfo implements  Comparable<AppInfo>{
     }
 
     public static AppInfo getAppInfo(PackageManager packageManager, String packageName) {
-        List<ResolveInfo> foundEntries = queryForApps(packageManager,packageName);
+        List<ResolveInfo> foundEntries = queryForApps(packageManager, packageName);
         if (foundEntries.isEmpty()) {
             return null;
         }
@@ -144,7 +145,7 @@ public class AppInfo implements  Comparable<AppInfo>{
 
     @Override
     public boolean equals(Object o) {
-        if(!(o instanceof AppInfo)){
+        if (!(o instanceof AppInfo)) {
             return false;
         }
 

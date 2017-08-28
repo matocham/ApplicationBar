@@ -10,7 +10,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.appbar.matocham.applicationbar.R;
-import com.appbar.matocham.applicationbar.applicationManager.NewWidgetManager;
+import com.appbar.matocham.applicationbar.applicationManager.WidgetManager;
 
 /**
  * Created by Mateusz on 10.01.2017.
@@ -31,7 +31,7 @@ public class AppBarWidgetProvider extends AppWidgetProvider {
             if (starAppIntent != null) {
                 context.startActivity(starAppIntent);
             } else {
-                NewWidgetManager widgetsManager = new NewWidgetManager(context);
+                WidgetManager widgetsManager = new WidgetManager(context);
                 widgetsManager.markAsRemoved(packageName, widgetId); // eliminates exception throw when creating apps list
                 AppBarWidgetService.updateAdapter(context);
             }

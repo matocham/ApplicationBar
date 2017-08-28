@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import com.appbar.matocham.applicationbar.R;
 import com.appbar.matocham.applicationbar.adapters.ApplicationListAdapter;
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
-import com.appbar.matocham.applicationbar.applicationManager.NewWidgetManager;
+import com.appbar.matocham.applicationbar.applicationManager.WidgetManager;
 import com.appbar.matocham.applicationbar.interfaces.AdapterItemInteractionListener;
 
 import java.util.ArrayList;
@@ -23,13 +23,13 @@ import java.util.List;
  */
 
 public class WidgetViewFragment extends Fragment implements AdapterItemInteractionListener {
-    public static final String TAG = "WidgetViewFragment";
-    List<AppInfo> availableApplications;
-    int widgetId;
-    ApplicationListAdapter adapter;
-    Context context;
-    NewWidgetManager widgetsManager;
-    RecyclerView recyclerView;
+    private static final String TAG = "WidgetViewFragment";
+    private List<AppInfo> availableApplications;
+    private int widgetId;
+    private ApplicationListAdapter adapter;
+    private Context context;
+    private WidgetManager widgetsManager;
+    private RecyclerView recyclerView;
 
     public static WidgetViewFragment getInstance(List<AppInfo> applications, int widgetId) {
         WidgetViewFragment instance = new WidgetViewFragment();
@@ -47,7 +47,7 @@ public class WidgetViewFragment extends Fragment implements AdapterItemInteracti
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
-        widgetsManager = new NewWidgetManager(context);
+        widgetsManager = new WidgetManager(context);
         if (availableApplications == null) {
             availableApplications = new ArrayList<>();
         }

@@ -17,10 +17,10 @@ import java.util.List;
 
 public class LoadAppsAsyncTask extends AsyncTask<Void, Void, List<AppInfo>> {
     public static final int LOAD_FINISHED = 1;
-    Context context;
-    Handler handler;
-    boolean mode;
-    Dialog progress;
+    private Context context;
+    private Handler handler;
+    private boolean mode;
+    private Dialog progress;
 
     public LoadAppsAsyncTask(Context context, Handler handler, boolean mode) {
         this.context = context;
@@ -30,12 +30,12 @@ public class LoadAppsAsyncTask extends AsyncTask<Void, Void, List<AppInfo>> {
 
     @Override
     protected List<AppInfo> doInBackground(Void... params) {
-        return AppInfo.getApplications(context,mode);
+        return AppInfo.getApplications(context, mode);
     }
 
     @Override
     protected void onPreExecute() {
-        progress = Utils.getProgressDialog(context,context.getString(R.string.app_loading_dialog_title), context.getString(R.string.app_loading_dialog_msg));
+        progress = Utils.getProgressDialog(context, context.getString(R.string.app_loading_dialog_title), context.getString(R.string.app_loading_dialog_msg));
         progress.show();
         super.onPreExecute();
     }

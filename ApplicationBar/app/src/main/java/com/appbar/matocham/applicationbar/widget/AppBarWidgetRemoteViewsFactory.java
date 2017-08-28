@@ -4,13 +4,11 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -18,7 +16,7 @@ import android.widget.RemoteViewsService;
 import com.appbar.matocham.applicationbar.R;
 import com.appbar.matocham.applicationbar.applicationManager.AppElement;
 import com.appbar.matocham.applicationbar.applicationManager.AppInfo;
-import com.appbar.matocham.applicationbar.applicationManager.NewWidgetManager;
+import com.appbar.matocham.applicationbar.applicationManager.WidgetManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,11 +32,11 @@ public class AppBarWidgetRemoteViewsFactory implements RemoteViewsService.Remote
     List<AppInfo> markedApps = new ArrayList<>();
     int widgetId;
 
-    NewWidgetManager widgetsManager;
+    WidgetManager widgetsManager;
 
     public AppBarWidgetRemoteViewsFactory(Context context, Intent intent) {
         this.context = context;
-        widgetsManager = new NewWidgetManager(context);
+        widgetsManager = new WidgetManager(context);
         this.widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
         Log.d(TAG, "WidgetID= " + widgetId);
     }

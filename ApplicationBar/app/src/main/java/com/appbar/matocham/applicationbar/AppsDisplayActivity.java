@@ -177,9 +177,16 @@ public class AppsDisplayActivity extends AppCompatActivity implements OnDialogDi
 
     @Override
     protected void onDestroy() {
-        if(loadAppsAsyncTask !=null && !loadAppsAsyncTask.isCancelled()){
+        if (loadAppsAsyncTask != null && !loadAppsAsyncTask.isCancelled()) {
             loadAppsAsyncTask.cancel(true);
         }
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        refreshTabs();
+        Log.e(TAG, "onResume");
+        super.onResume();
     }
 }

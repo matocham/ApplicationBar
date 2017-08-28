@@ -7,12 +7,12 @@ import org.codehaus.jackson.annotate.JsonIgnore;
  */
 
 public class AppElement {
-    public static final String DELIMITER = "#";
+    private static final String DELIMITER = "#";
     private static final int MAX_PEROID = 1000 * 60 * 20;
     private String name;
     private long removeTimestamp;
 
-    public AppElement(){
+    public AppElement() {
         //constructor used by Jackson
     }
 
