@@ -33,7 +33,6 @@ public class AppsDisplayActivity extends AppCompatActivity implements OnDialogDi
     private ViewPager widgetViews;
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    private MenuItem item;
 
     private WidgetFragmentsAdapter adapter;
     private TextView noWidgetsView;
@@ -49,8 +48,7 @@ public class AppsDisplayActivity extends AppCompatActivity implements OnDialogDi
                 adapter.notifyDataSetChanged();
                 AppBarWidgetService.updateWidget(AppsDisplayActivity.this);
                 widgetViews.setAdapter(adapter);
-                widgetViews.setVisibility(View.VISIBLE);
-                noWidgetsView.setVisibility(View.GONE);
+                showWidgets();
             }
             super.handleMessage(msg);
         }
@@ -70,7 +68,7 @@ public class AppsDisplayActivity extends AppCompatActivity implements OnDialogDi
         if (AppBarWidgetService.getAppWidgetIds(this).length > 0) {
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.edit_menu, menu);
-            item = menu.findItem(R.id.edit_widget);
+            menu.findItem(R.id.edit_widget);
         }
         return true;
     }
@@ -186,7 +184,22 @@ public class AppsDisplayActivity extends AppCompatActivity implements OnDialogDi
     @Override
     protected void onResume() {
         refreshTabs();
-        Log.e(TAG, "onResume");
+        widgetIds = AppBarWidgetService.getAppWidgetIds(this);
+        if (widgetIds.length == 0) {
+            hideWidgets();
+        } else {
+            showWidgets();
+        }
         super.onResume();
+    }
+
+    private void showWidgets() {
+        widgetViews.setVisibility(View.VISIBLE);
+        noWidgetsView.setVisibility(View.GONE);
+    }
+
+    private void hideWidgets() {
+        widgetViews.setVisibility(View.GONE);
+        noWidgetsView.setVisibility(View.VISIBLE);
     }
 }
