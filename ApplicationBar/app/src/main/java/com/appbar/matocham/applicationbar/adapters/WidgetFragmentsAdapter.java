@@ -24,11 +24,9 @@ public class WidgetFragmentsAdapter extends FragmentStatePagerAdapter {
     private int[] widgets;
     private List<AppInfo> applications;
     private WidgetManager widgetsManager;
-    private Context context;
 
     public WidgetFragmentsAdapter(FragmentManager fragmentManager, Context context) {
         super(fragmentManager);
-        this.context = context;
         widgetsManager = new WidgetManager(context);
         this.widgets = AppBarWidgetService.getAppWidgetIds(context);
         this.applications = Collections.emptyList();
@@ -54,7 +52,6 @@ public class WidgetFragmentsAdapter extends FragmentStatePagerAdapter {
     @Override
     public void notifyDataSetChanged() {
         widgetsManager.refresh();
-        widgets = AppBarWidgetService.getAppWidgetIds(context);
         super.notifyDataSetChanged();
     }
 

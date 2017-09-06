@@ -183,13 +183,26 @@ public class AppsDisplayActivity extends AppCompatActivity implements OnDialogDi
 
     @Override
     protected void onResume() {
-        refreshTabs();
+        Log.d(TAG, "entering onResume");
+        int previousWidgetsCount = widgetIds.length;
         widgetIds = AppBarWidgetService.getAppWidgetIds(this);
+        adapter.setWidgets(widgetIds);
+        Log.d(TAG, "Previous widgets amount: " + previousWidgetsCount);
+        Log.d(TAG, "Current widgets amount: " + widgetIds.length);
+
         if (widgetIds.length == 0) {
+            Log.d(TAG, "Widgets will be hidden");
             hideWidgets();
         } else {
-            showWidgets();
+            if (previousWidgetsCount == 0) {
+                Log.d(TAG, "Widgets will be reloaded");
+                loadWidgets();
+            } else {
+                Log.d(TAG, "Widgets will be shown");
+                showWidgets();
+            }
         }
+        refreshTabs();
         super.onResume();
     }
 
